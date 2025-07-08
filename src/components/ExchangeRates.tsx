@@ -1,6 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { TrendingUp, TrendingDown, RefreshCw } from 'lucide-react';
+import { CurrencyConverter } from './CurrencyConverter';
+import { SystemDashboard } from './SystemDashboard';
 
 // Displays live currency exchange rates with bank comparisons and a quick exchange calculator
 const exchangeRates = [
@@ -159,56 +161,21 @@ export const ExchangeRates: React.FC = () => {
         ))}
       </div>
 
-      {/* Quick Exchange */}
+      {/* Currency Converter */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.4 }}
-        className="bg-gradient-to-r from-light-surface/80 to-light-glass dark:from-dark-surface/80 dark:to-dark-glass border border-light-border dark:border-dark-border rounded-2xl p-4 md:p-6 shadow-glass transition-colors duration-300"
       >
-        <h3 className="text-lg md:text-xl font-bold text-light-text dark:text-dark-text font-editorial mb-4">Quick Exchange</h3>
-        <div className="space-y-4 md:grid md:grid-cols-3 md:gap-4 md:items-end md:space-y-0">
-          <div>
-            <label className="block text-sm text-light-text-secondary dark:text-dark-text-secondary mb-2">From</label>
-            <div className="flex">
-              <select className="bg-light-glass dark:bg-dark-glass border border-light-border dark:border-dark-border rounded-l-xl px-3 py-2 text-light-text dark:text-dark-text focus:outline-none focus:border-lime-accent/50 transition-colors duration-300">
-                <option>RON</option>
-                <option>EUR</option>
-                <option>USD</option>
-                <option>GBP</option>
-              </select>
-              <input
-                type="number"
-                placeholder="5000"
-                className="bg-light-glass dark:bg-dark-glass border border-l-0 border-light-border dark:border-dark-border rounded-r-xl px-3 py-2 text-light-text dark:text-dark-text focus:outline-none focus:border-lime-accent/50 flex-1 transition-colors duration-300"
-              />
-            </div>
-          </div>
-          <div>
-            <label className="block text-sm text-light-text-secondary dark:text-dark-text-secondary mb-2">To</label>
-            <div className="flex">
-              <select className="bg-light-glass dark:bg-dark-glass border border-light-border dark:border-dark-border rounded-l-xl px-3 py-2 text-light-text dark:text-dark-text focus:outline-none focus:border-lime-accent/50 transition-colors duration-300">
-                <option>EUR</option>
-                <option>RON</option>
-                <option>USD</option>
-                <option>GBP</option>
-              </select>
-              <input
-                type="number"
-                placeholder="1,005.12"
-                className="bg-light-glass dark:bg-dark-glass border border-l-0 border-light-border dark:border-dark-border rounded-r-xl px-3 py-2 text-light-text dark:text-dark-text focus:outline-none focus:border-lime-accent/50 flex-1 transition-colors duration-300"
-                readOnly
-              />
-            </div>
-          </div>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="bg-lime-accent text-light-base dark:text-dark-base px-6 py-3 rounded-xl font-medium hover:shadow-glow transition-all w-full md:w-auto"
-          >
-            Exchange Now
-          </motion.button>
-        </div>
+        <CurrencyConverter />
+      </motion.div>
+      {/* System Diagnostics */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.5 }}
+      >
+        <SystemDashboard />
       </motion.div>
     </div>
   );
