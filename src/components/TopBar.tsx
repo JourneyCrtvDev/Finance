@@ -4,7 +4,6 @@ import { Bell, Globe, LogOut } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 import { ColorPicker } from './ColorPicker';
 import { NotificationCenter, useNotifications } from './NotificationCenter';
-import { isSupabaseConfigured } from '../lib/supabaseClient';
 
 interface TopBarProps {
   onSignOut: () => void;
@@ -43,14 +42,6 @@ export const TopBar: React.FC<TopBarProps> = ({ onSignOut }) => {
 
       {/* Right section */}
       <div className="flex items-center space-x-3 md:space-x-6">
-        {/* Demo Mode Indicator */}
-        {!isSupabaseConfigured && (
-          <div className="hidden sm:flex items-center space-x-2 bg-orange-500/10 border border-orange-500/20 px-3 py-2 rounded-full">
-            <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse" />
-            <span className="text-xs text-orange-400 font-medium">Demo Mode</span>
-          </div>
-        )}
-
         {/* Theme Toggle */}
         <ThemeToggle />
         

@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { PiggyBank, TrendingUp, Shield, Zap, Plus, Edit3, Calendar, ArrowLeft, LogOut, DollarSign, Save } from 'lucide-react';
 import { BudgetService } from '../services/budgetService';
 import { BudgetPlan, BudgetSummary } from '../types/budget';
-import { isSupabaseConfigured, signOut } from '../lib/supabaseClient';
+import { signOut } from '../lib/supabaseClient';
 import { BudgetPlanSelector } from './BudgetPlanSelector';
 
 interface DashboardProps {
@@ -116,9 +116,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigateBack, onEditBudg
 
   const handleSignOut = async () => {
     setIsSigningOut(true);
-    if (isSupabaseConfigured) {
-      await signOut();
-    }
+    await signOut();
     setTimeout(() => {
       setIsSigningOut(false);
       onSignOut();
@@ -191,17 +189,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigateBack, onEditBudg
               <ArrowLeft className="w-5 h-5 text-light-text dark:text-dark-text" />
             </motion.button>
             <h2 className="text-3xl font-bold text-light-text dark:text-dark-text font-editorial">Budget Dashboard</h2>
-            {!isSupabaseConfigured && (
-              <span className="bg-orange-500/20 text-orange-400 px-2 py-1 rounded-full text-xs font-medium">
-                Demo Mode
-              </span>
-            )}
           </div>
-          {!isSupabaseConfigured && (
-            <p className="text-xs text-orange-400 mt-1">
-              Connect Supabase to save your data permanently
-            </p>
-          )}
         </div>
         <div className="flex items-center space-x-3">
           <motion.button

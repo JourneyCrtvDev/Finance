@@ -15,7 +15,6 @@ import {
 } from 'lucide-react';
 import { BudgetService } from '../services/budgetService';
 import { MonthlyPaymentPlan, PaymentItem } from '../types/budget';
-import { isSupabaseConfigured } from '../lib/supabaseClient';
 
 interface PaymentTrackerProps {
   currentUserId: string | null;
@@ -252,11 +251,6 @@ export const PaymentTracker: React.FC<PaymentTrackerProps> = ({ currentUserId, o
               <ArrowLeft className="w-5 h-5 text-light-text dark:text-dark-text" />
             </motion.button>
             <h2 className="text-3xl font-bold text-light-text dark:text-dark-text font-editorial">Payment Tracker</h2>
-            {!isSupabaseConfigured && (
-              <span className="bg-orange-500/20 text-orange-400 px-2 py-1 rounded-full text-xs font-medium">
-                Demo Mode
-              </span>
-            )}
           </div>
           <p className="text-light-text-secondary dark:text-dark-text-secondary">
             Track your monthly bills and due dates - {paymentPlan.name}

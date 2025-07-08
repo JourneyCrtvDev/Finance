@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Lock, User, Eye, EyeOff, Wallet } from 'lucide-react';
-import { signInWithEmail, signUpWithEmail, isSupabaseConfigured } from '../lib/supabaseClient';
+import { signInWithEmail, signUpWithEmail } from '../lib/supabaseClient';
 
 interface AuthFormProps {
   onAuthSuccess: () => void;
@@ -21,16 +21,6 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onAuthSuccess }) => {
     e.preventDefault();
     setError('');
     setIsLoading(true);
-
-    // Demo mode - skip actual authentication
-    if (!isSupabaseConfigured) {
-      setTimeout(() => {
-        setIsLoading(false);
-        onAuthSuccess();
-      }, 1000);
-      return;
-    }
-
     try {
       if (isLogin) {
         const { data, error } = await signInWithEmail(email, password);
@@ -45,7 +35,6 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onAuthSuccess }) => {
           setIsLoading(false);
           return;
         }
-        
         const { data, error } = await signUpWithEmail(email, password);
         if (error) {
           setError(error.message);
@@ -58,14 +47,6 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onAuthSuccess }) => {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleDemoLogin = () => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      onAuthSuccess();
-    }, 1000);
   };
 
   return (
@@ -98,13 +79,6 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onAuthSuccess }) => {
           <p className="text-light-text-secondary dark:text-dark-text-secondary">
             {isLogin ? 'Welcome back to your financial dashboard' : 'Start your financial journey today'}
           </p>
-          {!isSupabaseConfigured && (
-            <div className="mt-4 p-3 bg-orange-500/10 border border-orange-500/20 rounded-lg">
-              <p className="text-orange-400 text-sm">
-                Demo Mode: Authentication is simulated. Connect Supabase for real authentication.
-              </p>
-            </div>
-          )}
         </div>
 
         {/* Auth Form */}
@@ -238,20 +212,6 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onAuthSuccess }) => {
                 isLogin ? 'Sign In' : 'Create Account'
               )}
             </motion.button>
-
-            {/* Demo Button (when Supabase not configured) */}
-            {!isSupabaseConfigured && (
-              <motion.button
-                type="button"
-                onClick={handleDemoLogin}
-                disabled={isLoading}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="w-full bg-light-glass dark:bg-dark-glass border border-light-border dark:border-dark-border text-light-text dark:text-dark-text py-3 rounded-xl font-medium hover:border-lime-accent/30 transition-all disabled:opacity-50"
-              >
-                Continue with Demo
-              </motion.button>
-            )}
           </form>
 
           {/* Toggle Auth Mode */}

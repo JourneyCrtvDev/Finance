@@ -31,7 +31,8 @@ export const Insights: React.FC<InsightsProps> = ({ currentUserId }) => {
   const loadBudgetData = async () => {
     setIsLoading(true);
     try {
-      const plans = await BudgetService.getUserBudgetPlans(currentUserId || 'demo-user');
+      if (!currentUserId) return;
+      const plans = await BudgetService.getUserBudgetPlans(currentUserId);
       setBudgetPlans(plans);
     } catch (error) {
       console.error('Error loading budget data:', error);

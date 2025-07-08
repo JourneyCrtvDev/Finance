@@ -12,7 +12,7 @@ import { PaymentTracker } from './components/PaymentTracker';
 import { Settings } from './components/Settings';
 import { Insights } from './components/Insights';
 import { AuthForm } from './components/AuthForm';
-import { getCurrentUser, isSupabaseConfigured } from './lib/supabaseClient';
+import { getCurrentUser } from './lib/supabaseClient';
 
 function App() {
   const [activeSection, setActiveSection] = useState('budget');
@@ -26,14 +26,6 @@ function App() {
   }, []);
 
   const checkAuthStatus = async () => {
-    // If Supabase is not configured, skip auth check and go to demo mode
-    if (!isSupabaseConfigured) {
-      setIsAuthenticated(false);
-      setCurrentUserId(null);
-      setIsCheckingAuth(false);
-      return;
-    }
-
     try {
       const user = await getCurrentUser();
       setIsAuthenticated(!!user);
@@ -131,7 +123,7 @@ function App() {
       case 'settings':
         return <Settings />;
       default:
-        return <BudgetSetupForm />;
+        return <BudgetSetupForm onNavigateToDashboard={() => setActiveSection('dashboard')} editingPlan={editingBudgetPlan} currentUserId={currentUserId} />;
     }
   };
 

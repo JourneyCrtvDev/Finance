@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 import { ColorPicker } from './ColorPicker';
-import { isSupabaseConfigured, supabase, getCurrentUser } from '../lib/supabaseClient';
+import { supabase, getCurrentUser } from '../lib/supabaseClient';
 
 export const Settings: React.FC = () => {
   const [notifications, setNotifications] = useState({
@@ -112,7 +112,6 @@ export const Settings: React.FC = () => {
           if (error) {
             alert('Photo upload failed: ' + error.message);
           } else {
-            // Get public URL
             const { data: publicUrlData } = supabase.storage.from('avatars').getPublicUrl(`${user.id}/${file.name}`);
             updates.avatar_url = publicUrlData.publicUrl;
           }
@@ -123,7 +122,7 @@ export const Settings: React.FC = () => {
         alert('Supabase is not configured.');
         return;
       }
-      const { error } = await supabase.from('profiles').upsert(updates, { onConflict: 'id' });
+      const { error } = await supabase.from('profiles').upsert(updates);
       if (error) {
         alert('Profile update failed: ' + error.message);
       } else {

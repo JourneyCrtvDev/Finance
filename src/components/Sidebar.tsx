@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Wallet, TrendingUp, Send, BarChart3, Settings, ChevronLeft, ChevronRight, Calculator, LogOut, CreditCard, PieChart } from 'lucide-react';
+import { supabase, getCurrentUser } from '../lib/supabaseClient';
 
 // Collapsible navigation sidebar with user profile and section switching functionality
 interface SidebarProps {
@@ -21,6 +22,21 @@ const navigation = [
 export const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange, onSignOut }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isSigningOut, setIsSigningOut] = useState(false);
+  const [displayName, setDisplayName] = useState('');
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const user = await getCurrentUser();
+      if (!user || !supabase) return;
+      const { data, error } = await supabase.from('profiles').select('*').eq('id', user.id).single();
+      if (!error && data) {
+        setDisplayName(data.display_name || '');
+        setAvatarUrl(data.avatar_url || null);
+      }
+    };
+    fetchProfile();
+  }, []);
 
   const handleSignOut = async () => {
     setIsSigningOut(true);
@@ -137,8 +153,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange
         
         {/* User Profile */}
         <div className="flex items-center space-x-3 p-3 bg-light-glass dark:bg-dark-glass rounded-xl">
-          <div className="w-8 h-8 bg-lime-accent rounded-full flex items-center justify-center">
-            <span className="text-light-base dark:text-dark-base font-bold text-sm">JD</span>
+          <div className="w-8 h-8 bg-lime-accent rounded-full flex items-center justify-center overflow-hidden">
+            {avatarUrl ? (
+              <img src={avatarUrl} alt="Avatar" className="w-8 h-8 rounded-full object-cover" />
+            ) : (
+              <span className="text-light-base dark:text-dark-base font-bold text-sm">
+                {displayName ? displayName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0,2) : 'JD'}
+              </span>
+            )}
           </div>
           {!isCollapsed && (
             <motion.div
@@ -146,7 +168,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange
               animate={{ opacity: isCollapsed ? 0 : 1 }}
               transition={{ duration: 0.2 }}
             >
-              <p className="text-sm font-medium text-light-text dark:text-dark-text">John Doe</p>
+              <p className="text-sm font-medium text-light-text dark:text-dark-text">{displayName || 'John Doe'}</p>
               <p className="text-xs text-light-text-secondary dark:text-dark-text-secondary">Premium Member</p>
             </motion.div>
           )}

@@ -3,19 +3,18 @@ import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { DEFAULT_ALLOCATIONS } from '../types/budget';
 import { BudgetService } from '../services/budgetService';
-import { isSupabaseConfigured } from '../lib/supabaseClient';
-import { BudgetPlan } from '../types/budget';
+import { BudgetPlan, IncomeItem, ExpenseItem, AllocationTarget } from '../types/budget';
 import { BudgetIncomeStep } from './budget/BudgetIncomeStep';
 import { BudgetExpenseStep } from './budget/BudgetExpenseStep';
 import { BudgetAllocationStep } from './budget/BudgetAllocationStep';
 
 interface BudgetSetupFormProps {
   onNavigateToDashboard: () => void;
-  editingPlan?: BudgetPlan | null;
+  editingPlan: BudgetPlan | null;
   currentUserId: string | null;
 }
 
-export const BudgetSetupForm: React.FC<BudgetSetupFormProps> = ({ onNavigateToDashboard, editingPlan }) => {
+export const BudgetSetupForm: React.FC<BudgetSetupFormProps> = ({ onNavigateToDashboard, editingPlan, currentUserId }) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [budgetName, setBudgetName] = useState(editingPlan?.name || '');
   const [incomeItems, setIncomeItems] = useState<IncomeItem[]>([
@@ -147,11 +146,6 @@ export const BudgetSetupForm: React.FC<BudgetSetupFormProps> = ({ onNavigateToDa
           className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 bg-lime-accent text-light-base dark:text-dark-base px-6 py-3 rounded-xl font-medium shadow-glow"
         >
           ✓ Budget plan {isEditing ? 'updated' : 'created'} successfully!
-          {!isSupabaseConfigured && (
-            <span className="block text-xs opacity-90 mt-1">
-              (Demo mode - Connect Supabase for persistence)
-            </span>
-          )}
         </motion.div>
       )}
 
