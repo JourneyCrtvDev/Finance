@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
   User, 
@@ -46,6 +46,20 @@ export const Settings: React.FC = () => {
   const [email, setEmail] = useState("john.doe@example.com");
   const [profilePhoto, setProfilePhoto] = useState<string | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+
+  // Load profile from Supabase on mount
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const user = await getCurrentUser();
+      if (!user || !supabase) return;
+      const { data, error } = await supabase.from('profiles').select('*').eq('id', user.id).single();
+      if (!error && data) {
+        if (data.display_name) setDisplayName(data.display_name);
+        if (data.avatar_url) setPhotoPreview(data.avatar_url);
+      }
+    };
+    fetchProfile();
+  }, []);
 
   const handleNotificationChange = (key: keyof typeof notifications) => {
     setNotifications(prev => ({ ...prev, [key]: !prev[key] }));
