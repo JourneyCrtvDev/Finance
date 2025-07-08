@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Wallet, TrendingUp, Send, BarChart3, Settings, ChevronLeft, ChevronRight, Calculator, LogOut, CreditCard, PieChart } from 'lucide-react';
 import { supabase, getCurrentUser } from '../lib/supabaseClient';
+import { FaShoppingCart } from 'react-icons/fa';
 
 // Collapsible navigation sidebar with user profile and section switching functionality
 interface SidebarProps {
@@ -128,10 +129,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange
           </motion.button>
         ))}
         <li
-          className={`sidebar-link${activeSection === 'shopping' ? ' active' : ''}`}
+          className={`sidebar-link flex items-center gap-3 px-4 py-2 rounded-lg transition-colors duration-200 cursor-pointer ${activeSection === 'shopping' ? 'text-lime-500 bg-lime-100 dark:bg-lime-900 font-semibold' : 'text-white hover:bg-gray-100/10 dark:hover:bg-gray-800/80'}`}
           onClick={() => onSectionChange('shopping')}
         >
-          <span role="img" aria-label="Shopping">🛒</span> Shopping List
+          <FaShoppingCart className="w-5 h-5" />
+          <span>Shopping List</span>
         </li>
       </nav>
 

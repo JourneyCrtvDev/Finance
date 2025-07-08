@@ -169,12 +169,13 @@ export const ShoppingListComponent: React.FC = () => {
             {lists.map(list => (
               <li
                 key={list.id}
-                className={`p-2 rounded-lg mb-2 cursor-pointer ${activeList?.id === list.id ? 'bg-lime-100 dark:bg-lime-900' : 'hover:bg-gray-100 dark:hover:bg-gray-800'}`}
+                className={`p-2 rounded-xl mb-3 cursor-pointer transition-colors duration-200 flex items-center gap-2 border-2 ${activeList?.id === list.id ? 'bg-lime-200/80 dark:bg-lime-700/80 border-lime-400 dark:border-lime-500 shadow-lg' : 'bg-white/10 dark:bg-gray-900/60 border-transparent hover:bg-gray-100/60 dark:hover:bg-gray-800/80'}`}
                 onClick={() => setActiveList(list)}
+                style={{ minHeight: 48 }}
               >
-                <span className="font-medium">{list.name}</span>
+                <span className="font-semibold text-lg text-gray-900 dark:text-white flex-1 truncate">{list.name}</span>
                 <button
-                  className="ml-2 text-xs text-red-500 hover:underline"
+                  className="text-xs text-red-500 hover:underline px-2 py-1 rounded focus:outline-none focus:ring-2 focus:ring-red-400"
                   onClick={e => { e.stopPropagation(); handleDeleteList(list.id); }}
                 >Delete</button>
               </li>
@@ -183,30 +184,30 @@ export const ShoppingListComponent: React.FC = () => {
         </div>
         <div className="w-2/3">
           {activeList ? (
-            <div>
-              <div className="flex items-center mb-2">
-                <h4 className="text-lg font-semibold flex-1">{activeList.name}</h4>
+            <div className="bg-white/80 dark:bg-gray-900/80 rounded-xl p-4 shadow-md border border-gray-200 dark:border-gray-700">
+              <div className="flex items-center mb-4">
+                <h4 className="text-xl font-bold flex-1 text-gray-900 dark:text-white">{activeList.name}</h4>
                 <button
-                  className="text-xs text-blue-500 hover:underline mr-2"
+                  className="text-xs text-blue-600 hover:underline mr-2 px-2 py-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
                   onClick={handleReuseList}
                   disabled={isLoading}
                 >Reuse</button>
               </div>
-              <ul>
+              <ul className="mb-4">
                 {activeList.items.map(item => (
-                  <li key={item.id} className="flex items-center mb-2 p-2 rounded-lg bg-white dark:bg-gray-800 shadow-sm">
+                  <li key={item.id} className="flex items-center mb-2 p-2 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm gap-2">
                     <input
                       type="checkbox"
                       checked={item.checked}
                       onChange={() => handleCheckItem(item.id)}
                       className="mr-2 accent-lime-500"
                     />
-                    <span className={`flex-1 ${item.checked ? 'line-through text-gray-400' : ''}`}>{item.name} {item.quantity ? <span className="text-xs text-gray-500">x{item.quantity}</span> : null}</span>
+                    <span className={`flex-1 ${item.checked ? 'line-through text-gray-400' : 'text-gray-900 dark:text-white'}`}>{item.name} {item.quantity ? <span className="text-xs text-gray-500">x{item.quantity}</span> : null}</span>
                     <div className="flex gap-1 mr-2">
                       {statusColors.map(sc => (
                         <button
                           key={sc.color}
-                          className="w-4 h-4 rounded-full border-2"
+                          className="w-4 h-4 rounded-full border-2 focus:outline-none focus:ring-2 focus:ring-lime-400"
                           style={{ background: item.statusColor === sc.color ? sc.color : 'transparent', borderColor: sc.color }}
                           title={sc.label}
                           onClick={() => handleChangeItemColor(item.id, sc.color)}
@@ -214,30 +215,30 @@ export const ShoppingListComponent: React.FC = () => {
                       ))}
                     </div>
                     <button
-                      className="text-xs text-red-500 hover:underline"
+                      className="text-xs text-red-500 hover:underline px-2 py-1 rounded focus:outline-none focus:ring-2 focus:ring-red-400"
                       onClick={() => handleDeleteItem(item.id)}
                     >Delete</button>
                   </li>
                 ))}
               </ul>
-              <div className="flex gap-2 mt-4">
+              <div className="flex gap-2 mt-2">
                 <input
                   type="text"
-                  className="border rounded-lg p-2 flex-1"
+                  className="border rounded-lg p-2 flex-1 bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-lime-400"
                   placeholder="Item name..."
                   value={newItem.name}
                   onChange={e => setNewItem({ ...newItem, name: e.target.value })}
                 />
                 <input
                   type="number"
-                  className="border rounded-lg p-2 w-20"
+                  className="border rounded-lg p-2 w-20 bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-lime-400"
                   placeholder="Qty"
                   value={newItem.quantity || 1}
                   min={1}
                   onChange={e => setNewItem({ ...newItem, quantity: Number(e.target.value) })}
                 />
                 <button
-                  className="bg-lime-500 text-white px-4 py-2 rounded-lg hover:bg-lime-600"
+                  className="bg-lime-500 text-white px-4 py-2 rounded-lg hover:bg-lime-600 focus:outline-none focus:ring-2 focus:ring-lime-400 font-semibold"
                   onClick={handleAddItem}
                   disabled={!newItem.name.trim()}
                 >
