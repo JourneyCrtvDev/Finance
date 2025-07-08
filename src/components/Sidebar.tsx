@@ -17,8 +17,8 @@ const navigation = [
   { id: 'payments', label: 'Payments', icon: CreditCard },
   { id: 'exchange', label: 'Exchange', icon: TrendingUp },
   { id: 'insights', label: 'Insights', icon: PieChart },
-  { id: 'settings', label: 'Settings', icon: Settings },
   { id: 'shopping', label: 'Shopping List', icon: () => <FaShoppingCart className="w-6 h-6" /> },
+  { id: 'settings', label: 'Settings', icon: Settings },
 ];
 
 export const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange, onSignOut }) => {
