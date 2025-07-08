@@ -18,6 +18,7 @@ const navigation = [
   { id: 'exchange', label: 'Exchange', icon: TrendingUp },
   { id: 'insights', label: 'Insights', icon: PieChart },
   { id: 'settings', label: 'Settings', icon: Settings },
+  { id: 'shopping', label: 'Shopping List', icon: () => <FaShoppingCart className="w-6 h-6" /> },
 ];
 
 export const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange, onSignOut }) => {
@@ -96,7 +97,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange
             whileTap={{ scale: 0.98 }}
           >
             <div className={`relative ${activeSection === item.id ? 'drop-shadow-glow' : ''}`}>
-              <item.icon className="w-6 h-6" />
+              {typeof item.icon === 'function' ? <item.icon /> : <item.icon className="w-6 h-6" />}
               {activeSection === item.id && (
                 <motion.div
                   layoutId="activeGlow"
@@ -128,13 +129,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange
             )}
           </motion.button>
         ))}
-        <li
-          className={`sidebar-link flex items-center gap-3 px-4 py-2 rounded-lg transition-colors duration-200 cursor-pointer ${activeSection === 'shopping' ? 'text-lime-500 bg-lime-100 dark:bg-lime-900 font-semibold' : 'text-white hover:bg-gray-100/10 dark:hover:bg-gray-800/80'}`}
-          onClick={() => onSectionChange('shopping')}
-        >
-          <FaShoppingCart className="w-5 h-5" />
-          <span>Shopping List</span>
-        </li>
       </nav>
 
       {/* Footer */}
