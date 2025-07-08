@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 import { ColorPicker } from './ColorPicker';
-import { isSupabaseConfigured } from '../lib/supabaseClient';
+import { isSupabaseConfigured, supabase, getCurrentUser } from '../lib/supabaseClient';
 
 export const Settings: React.FC = () => {
   const [notifications, setNotifications] = useState({
@@ -71,8 +71,46 @@ export const Settings: React.FC = () => {
     }
   };
 
-  const handleSaveProfile = () => {
-    alert(`Profile saved!\nName: ${displayName}\nEmail: ${email}\nPhoto: ${profilePhoto || "None"}`);
+  const handleSaveProfile = async () => {
+    try {
+      // Get current user
+      const user = await getCurrentUser();
+      if (!user) {
+        alert('You must be logged in to update your profile.');
+        return;
+      }
+      // Prepare update object
+      const updates: any = {
+        id: user.id,
+        display_name: displayName,
+        email: email,
+      };
+      // If photo is uploaded, upload to Supabase Storage (optional)
+      if (photoPreview && profilePhoto) {
+        // Upload to Supabase Storage (avatars bucket)
+        const input = document.getElementById('profile-photo-upload') as HTMLInputElement | null;
+        const file = input?.files?.[0];
+        if (file) {
+          const { data, error } = await supabase.storage.from('avatars').upload(`${user.id}/${file.name}`, file, { upsert: true });
+          if (error) {
+            alert('Photo upload failed: ' + error.message);
+          } else {
+            // Get public URL
+            const { data: publicUrlData } = supabase.storage.from('avatars').getPublicUrl(`${user.id}/${file.name}`);
+            updates.avatar_url = publicUrlData.publicUrl;
+          }
+        }
+      }
+      // Update profile in Supabase
+      const { error } = await supabase.from('profiles').upsert(updates, { onConflict: ['id'] });
+      if (error) {
+        alert('Profile update failed: ' + error.message);
+      } else {
+        alert('Profile saved!');
+      }
+    } catch (err) {
+      alert('An unexpected error occurred while saving your profile.');
+    }
   };
 
   const exportData = () => {
@@ -98,13 +136,6 @@ export const Settings: React.FC = () => {
         <p className="text-light-text-secondary dark:text-dark-text-secondary mt-1">
           Customize your FinanceHub experience
         </p>
-        {!isSupabaseConfigured && (
-          <div className="mt-2 p-2 bg-orange-500/10 border border-orange-500/20 rounded-lg">
-            <p className="text-orange-400 text-sm">
-              Demo Mode: Settings changes are not persisted
-            </p>
-          </div>
-        )}
       </motion.div>
 
       {/* Profile Settings */}
