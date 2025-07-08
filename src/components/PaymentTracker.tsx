@@ -38,8 +38,10 @@ export const PaymentTracker: React.FC<PaymentTrackerProps> = ({ currentUserId, o
     dueDate: '',
     category: 'fixed',
     notes: '',
-    isPaid: false
+    isPaid: false,
+    profileType: 'personal',
   });
+  const [selectedProfileType, setSelectedProfileType] = useState<'business' | 'personal'>('personal');
 
   useEffect(() => {
     loadPaymentPlan();
@@ -88,7 +90,8 @@ export const PaymentTracker: React.FC<PaymentTrackerProps> = ({ currentUserId, o
       dueDate: newPayment.dueDate,
       category: newPayment.category || 'fixed',
       notes: newPayment.notes || '',
-      isPaid: false
+      isPaid: false,
+      profileType: selectedProfileType,
     };
 
     const updatedPlan: MonthlyPaymentPlan = {
@@ -110,7 +113,8 @@ export const PaymentTracker: React.FC<PaymentTrackerProps> = ({ currentUserId, o
         dueDate: '',
         category: 'fixed',
         notes: '',
-        isPaid: false
+        isPaid: false,
+        profileType: 'personal',
       });
       setShowAddForm(false);
     }
@@ -224,6 +228,9 @@ export const PaymentTracker: React.FC<PaymentTrackerProps> = ({ currentUserId, o
     }
     return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
   });
+
+  const businessPayments = sortedPayments.filter(p => p.profileType === 'business');
+  const personalPayments = sortedPayments.filter(p => p.profileType !== 'business');
 
   return (
     <div className="space-y-6">
@@ -345,6 +352,17 @@ export const PaymentTracker: React.FC<PaymentTrackerProps> = ({ currentUserId, o
             className="bg-light-surface/50 dark:bg-dark-surface/50 backdrop-blur-sm border border-light-border dark:border-dark-border rounded-2xl p-6 shadow-glass"
           >
             <h3 className="text-xl font-bold text-light-text dark:text-dark-text font-editorial mb-4">Add New Payment</h3>
+            <div className="mb-6">
+              <label className="block text-sm font-medium mb-2">Profile Type</label>
+              <select
+                value={selectedProfileType}
+                onChange={e => setSelectedProfileType(e.target.value as 'business' | 'personal')}
+                className="w-full p-2 border rounded-lg mb-4"
+              >
+                <option value="personal">Personal</option>
+                <option value="business">Business</option>
+              </select>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm text-light-text-secondary dark:text-dark-text-secondary mb-2">Payment Name</label>
@@ -441,132 +459,263 @@ export const PaymentTracker: React.FC<PaymentTrackerProps> = ({ currentUserId, o
             </p>
           </div>
         ) : (
-          <div className="space-y-3">
-            {sortedPayments.map((payment, index) => {
-              const status = getDueDateStatus(payment.dueDate, payment.isPaid);
-              const daysUntil = getDaysUntilDue(payment.dueDate);
-              
-              return (
-                <motion.div
-                  key={payment.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.05 }}
-                  className={`p-4 rounded-xl border transition-all ${
-                    payment.isPaid
-                      ? 'bg-lime-accent/5 border-lime-accent/20'
-                      : status === 'overdue'
-                      ? 'bg-red-500/5 border-red-500/20'
-                      : status === 'urgent'
-                      ? 'bg-orange-500/5 border-orange-500/20'
-                      : status === 'soon'
-                      ? 'bg-yellow-500/5 border-yellow-500/20'
-                      : 'bg-light-glass dark:bg-dark-glass border-light-border dark:border-dark-border'
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-4 flex-1">
-                      <motion.button
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        onClick={() => handleTogglePaid(payment.id)}
-                        className={`p-2 rounded-full transition-colors ${
-                          payment.isPaid
-                            ? 'bg-lime-accent text-light-base dark:text-dark-base'
-                            : 'bg-light-glass dark:bg-dark-glass border border-light-border dark:border-dark-border hover:border-lime-accent/30'
-                        }`}
-                      >
-                        {payment.isPaid ? (
-                          <Check className="w-4 h-4" />
-                        ) : (
-                          <div className="w-4 h-4" />
-                        )}
-                      </motion.button>
-                      
-                      <div className="flex-1">
-                        <div className="flex items-center space-x-3 mb-1">
-                          <h4 className={`font-semibold ${
-                            payment.isPaid 
-                              ? 'text-light-text-secondary dark:text-dark-text-secondary line-through' 
-                              : 'text-light-text dark:text-dark-text'
-                          }`}>
-                            {payment.name}
-                          </h4>
-                          <span className={`text-xs px-2 py-1 rounded-full ${
-                            payment.category === 'fixed' 
-                              ? 'bg-blue-500/20 text-blue-400' 
-                              : 'bg-orange-500/20 text-orange-400'
-                          }`}>
-                            {payment.category}
-                          </span>
-                        </div>
+          <div className="space-y-8">
+            <div>
+              <h4 className="text-lg font-bold mb-2">Business Payments</h4>
+              {businessPayments.length === 0 ? <p className="text-sm text-light-text-secondary">No business payments.</p> : businessPayments.map((payment, index) => {
+                const status = getDueDateStatus(payment.dueDate, payment.isPaid);
+                const daysUntil = getDaysUntilDue(payment.dueDate);
+                
+                return (
+                  <motion.div
+                    key={payment.id}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.3, delay: index * 0.05 }}
+                    className={`p-4 rounded-xl border transition-all ${
+                      payment.isPaid
+                        ? 'bg-lime-accent/5 border-lime-accent/20'
+                        : status === 'overdue'
+                        ? 'bg-red-500/5 border-red-500/20'
+                        : status === 'urgent'
+                        ? 'bg-orange-500/5 border-orange-500/20'
+                        : status === 'soon'
+                        ? 'bg-yellow-500/5 border-yellow-500/20'
+                        : 'bg-light-glass dark:bg-dark-glass border-light-border dark:border-dark-border'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-4 flex-1">
+                        <motion.button
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          onClick={() => handleTogglePaid(payment.id)}
+                          className={`p-2 rounded-full transition-colors ${
+                            payment.isPaid
+                              ? 'bg-lime-accent text-light-base dark:text-dark-base'
+                              : 'bg-light-glass dark:bg-dark-glass border border-light-border dark:border-dark-border hover:border-lime-accent/30'
+                          }`}
+                        >
+                          {payment.isPaid ? (
+                            <Check className="w-4 h-4" />
+                          ) : (
+                            <div className="w-4 h-4" />
+                          )}
+                        </motion.button>
                         
-                        <div className="flex items-center space-x-4 text-sm">
-                          <span className={`font-bold ${
-                            payment.isPaid 
-                              ? 'text-light-text-secondary dark:text-dark-text-secondary' 
-                              : 'text-lime-accent'
-                          }`}>
-                            {payment.amount.toLocaleString()} LEI
-                          </span>
-                          
-                          <div className="flex items-center space-x-2">
-                            <Calendar className="w-4 h-4 text-light-text-secondary dark:text-dark-text-secondary" />
-                            <span className={`${
+                        <div className="flex-1">
+                          <div className="flex items-center space-x-3 mb-1">
+                            <h5 className={`font-semibold ${
                               payment.isPaid 
-                                ? 'text-light-text-secondary dark:text-dark-text-secondary' 
-                                : status === 'overdue'
-                                ? 'text-red-400'
-                                : status === 'urgent'
-                                ? 'text-orange-400'
-                                : status === 'soon'
-                                ? 'text-yellow-400'
-                                : 'text-light-text-secondary dark:text-dark-text-secondary'
+                                ? 'text-light-text-secondary dark:text-dark-text-secondary line-through' 
+                                : 'text-light-text dark:text-dark-text'
                             }`}>
-                              {formatDate(payment.dueDate)}
-                              {!payment.isPaid && (
-                                <span className="ml-1">
-                                  {daysUntil < 0 
-                                    ? `(${Math.abs(daysUntil)} days overdue)` 
-                                    : daysUntil === 0 
-                                    ? '(Due today)' 
-                                    : `(${daysUntil} days)`
-                                  }
-                                </span>
-                              )}
+                              {payment.name}
+                            </h5>
+                            <span className={`text-xs px-2 py-1 rounded-full ${
+                              payment.category === 'fixed' 
+                                ? 'bg-blue-500/20 text-blue-400' 
+                                : 'bg-orange-500/20 text-orange-400'
+                            }`}>
+                              {payment.category}
                             </span>
                           </div>
                           
-                          {!payment.isPaid && status === 'overdue' && (
-                            <div className="flex items-center space-x-1 text-red-400">
-                              <AlertCircle className="w-4 h-4" />
-                              <span className="text-xs font-medium">OVERDUE</span>
+                          <div className="flex items-center space-x-4 text-sm">
+                            <span className={`font-bold ${
+                              payment.isPaid 
+                                ? 'text-light-text-secondary dark:text-dark-text-secondary' 
+                                : 'text-lime-accent'
+                            }`}>
+                              {payment.amount.toLocaleString()} LEI
+                            </span>
+                            
+                            <div className="flex items-center space-x-2">
+                              <Calendar className="w-4 h-4 text-light-text-secondary dark:text-dark-text-secondary" />
+                              <span className={`${
+                                payment.isPaid 
+                                  ? 'text-light-text-secondary dark:text-dark-text-secondary' 
+                                  : status === 'overdue'
+                                  ? 'text-red-400'
+                                  : status === 'urgent'
+                                  ? 'text-orange-400'
+                                  : status === 'soon'
+                                  ? 'text-yellow-400'
+                                  : 'text-light-text-secondary dark:text-dark-text-secondary'
+                              }`}>
+                                {formatDate(payment.dueDate)}
+                                {!payment.isPaid && (
+                                  <span className="ml-1">
+                                    {daysUntil < 0 
+                                      ? `(${Math.abs(daysUntil)} days overdue)` 
+                                      : daysUntil === 0 
+                                      ? '(Due today)' 
+                                      : `(${daysUntil} days)`
+                                    }
+                                  </span>
+                                )}
+                              </span>
                             </div>
+                            
+                            {!payment.isPaid && status === 'overdue' && (
+                              <div className="flex items-center space-x-1 text-red-400">
+                                <AlertCircle className="w-4 h-4" />
+                                <span className="text-xs font-medium">OVERDUE</span>
+                              </div>
+                            )}
+                          </div>
+                          
+                          {payment.notes && (
+                            <p className="text-xs text-light-text-secondary dark:text-dark-text-secondary mt-1">
+                              {payment.notes}
+                            </p>
                           )}
                         </div>
-                        
-                        {payment.notes && (
-                          <p className="text-xs text-light-text-secondary dark:text-dark-text-secondary mt-1">
-                            {payment.notes}
-                          </p>
-                        )}
+                      </div>
+                      
+                      <div className="flex items-center space-x-2">
+                        <motion.button
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          onClick={() => handleDeletePayment(payment.id)}
+                          className="p-2 text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </motion.button>
                       </div>
                     </div>
-                    
-                    <div className="flex items-center space-x-2">
-                      <motion.button
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        onClick={() => handleDeletePayment(payment.id)}
-                        className="p-2 text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </motion.button>
+                  </motion.div>
+                );
+              })}
+            </div>
+            <div>
+              <h4 className="text-lg font-bold mb-2">Personal Payments</h4>
+              {personalPayments.length === 0 ? <p className="text-sm text-light-text-secondary">No personal payments.</p> : personalPayments.map((payment, index) => {
+                const status = getDueDateStatus(payment.dueDate, payment.isPaid);
+                const daysUntil = getDaysUntilDue(payment.dueDate);
+                
+                return (
+                  <motion.div
+                    key={payment.id}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.3, delay: index * 0.05 }}
+                    className={`p-4 rounded-xl border transition-all ${
+                      payment.isPaid
+                        ? 'bg-lime-accent/5 border-lime-accent/20'
+                        : status === 'overdue'
+                        ? 'bg-red-500/5 border-red-500/20'
+                        : status === 'urgent'
+                        ? 'bg-orange-500/5 border-orange-500/20'
+                        : status === 'soon'
+                        ? 'bg-yellow-500/5 border-yellow-500/20'
+                        : 'bg-light-glass dark:bg-dark-glass border-light-border dark:border-dark-border'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-4 flex-1">
+                        <motion.button
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          onClick={() => handleTogglePaid(payment.id)}
+                          className={`p-2 rounded-full transition-colors ${
+                            payment.isPaid
+                              ? 'bg-lime-accent text-light-base dark:text-dark-base'
+                              : 'bg-light-glass dark:bg-dark-glass border border-light-border dark:border-dark-border hover:border-lime-accent/30'
+                          }`}
+                        >
+                          {payment.isPaid ? (
+                            <Check className="w-4 h-4" />
+                          ) : (
+                            <div className="w-4 h-4" />
+                          )}
+                        </motion.button>
+                        
+                        <div className="flex-1">
+                          <div className="flex items-center space-x-3 mb-1">
+                            <h5 className={`font-semibold ${
+                              payment.isPaid 
+                                ? 'text-light-text-secondary dark:text-dark-text-secondary line-through' 
+                                : 'text-light-text dark:text-dark-text'
+                            }`}>
+                              {payment.name}
+                            </h5>
+                            <span className={`text-xs px-2 py-1 rounded-full ${
+                              payment.category === 'fixed' 
+                                ? 'bg-blue-500/20 text-blue-400' 
+                                : 'bg-orange-500/20 text-orange-400'
+                            }`}>
+                              {payment.category}
+                            </span>
+                          </div>
+                          
+                          <div className="flex items-center space-x-4 text-sm">
+                            <span className={`font-bold ${
+                              payment.isPaid 
+                                ? 'text-light-text-secondary dark:text-dark-text-secondary' 
+                                : 'text-lime-accent'
+                            }`}>
+                              {payment.amount.toLocaleString()} LEI
+                            </span>
+                            
+                            <div className="flex items-center space-x-2">
+                              <Calendar className="w-4 h-4 text-light-text-secondary dark:text-dark-text-secondary" />
+                              <span className={`${
+                                payment.isPaid 
+                                  ? 'text-light-text-secondary dark:text-dark-text-secondary' 
+                                  : status === 'overdue'
+                                  ? 'text-red-400'
+                                  : status === 'urgent'
+                                  ? 'text-orange-400'
+                                  : status === 'soon'
+                                  ? 'text-yellow-400'
+                                  : 'text-light-text-secondary dark:text-dark-text-secondary'
+                              }`}>
+                                {formatDate(payment.dueDate)}
+                                {!payment.isPaid && (
+                                  <span className="ml-1">
+                                    {daysUntil < 0 
+                                      ? `(${Math.abs(daysUntil)} days overdue)` 
+                                      : daysUntil === 0 
+                                      ? '(Due today)' 
+                                      : `(${daysUntil} days)`
+                                    }
+                                  </span>
+                                )}
+                              </span>
+                            </div>
+                            
+                            {!payment.isPaid && status === 'overdue' && (
+                              <div className="flex items-center space-x-1 text-red-400">
+                                <AlertCircle className="w-4 h-4" />
+                                <span className="text-xs font-medium">OVERDUE</span>
+                              </div>
+                            )}
+                          </div>
+                          
+                          {payment.notes && (
+                            <p className="text-xs text-light-text-secondary dark:text-dark-text-secondary mt-1">
+                              {payment.notes}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center space-x-2">
+                        <motion.button
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          onClick={() => handleDeletePayment(payment.id)}
+                          className="p-2 text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </motion.button>
+                      </div>
                     </div>
-                  </div>
-                </motion.div>
-              );
-            })}
+                  </motion.div>
+                );
+              })}
+            </div>
           </div>
         )}
       </motion.div>

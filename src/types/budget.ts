@@ -62,6 +62,7 @@ export interface PaymentItem {
   category: 'fixed' | 'variable';
   notes?: string;
   paymentMethod?: string;
+  profileType: 'business' | 'personal';
 }
 
 export interface MonthlyPaymentPlan {
