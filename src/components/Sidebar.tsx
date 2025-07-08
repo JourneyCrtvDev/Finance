@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Wallet, TrendingUp, Send, BarChart3, Settings, ChevronLeft, ChevronRight, Calculator, LogOut, CreditCard, PieChart } from 'lucide-react';
+import { Wallet, TrendingUp, Send, BarChart3, Settings, ChevronLeft, ChevronRight, Calculator, LogOut, CreditCard, PieChart, ShoppingBag } from 'lucide-react';
 import { supabase, getCurrentUser } from '../lib/supabaseClient';
-import { FaShoppingCart } from 'react-icons/fa';
 
 // Collapsible navigation sidebar with user profile and section switching functionality
 interface SidebarProps {
@@ -17,7 +16,7 @@ const navigation = [
   { id: 'payments', label: 'Payments', icon: CreditCard },
   { id: 'exchange', label: 'Exchange', icon: TrendingUp },
   { id: 'insights', label: 'Insights', icon: PieChart },
-  { id: 'shopping', label: 'Shopping List', icon: () => <FaShoppingCart className="w-6 h-6" /> },
+  { id: 'shopping', label: 'Shopping List', icon: ShoppingBag },
   { id: 'settings', label: 'Settings', icon: Settings },
 ];
 
@@ -97,7 +96,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange
             whileTap={{ scale: 0.98 }}
           >
             <div className={`relative ${activeSection === item.id ? 'drop-shadow-glow' : ''}`}>
-              {typeof item.icon === 'function' ? <item.icon /> : <item.icon className="w-6 h-6" />}
+              <item.icon className="w-6 h-6" />
               {activeSection === item.id && (
                 <motion.div
                   layoutId="activeGlow"
