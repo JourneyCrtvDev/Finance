@@ -13,6 +13,7 @@ import { Settings } from './components/Settings';
 import { Insights } from './components/Insights';
 import { AuthForm } from './components/AuthForm';
 import { getCurrentUser } from './lib/supabaseClient';
+import ShoppingListComponent from './components/ShoppingList';
 
 function App() {
   const [activeSection, setActiveSection] = useState('budget');
@@ -122,6 +123,8 @@ function App() {
         return <Insights currentUserId={currentUserId} />;
       case 'settings':
         return <Settings />;
+      case 'shopping':
+        return <ShoppingListComponent />;
       default:
         return <BudgetSetupForm onNavigateToDashboard={() => setActiveSection('dashboard')} editingPlan={editingBudgetPlan} currentUserId={currentUserId} />;
     }

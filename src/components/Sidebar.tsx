@@ -127,6 +127,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange
             )}
           </motion.button>
         ))}
+        <li
+          className={`sidebar-link${activeSection === 'shopping' ? ' active' : ''}`}
+          onClick={() => onSectionChange('shopping')}
+        >
+          <span role="img" aria-label="Shopping">🛒</span> Shopping List
+        </li>
       </nav>
 
       {/* Footer */}

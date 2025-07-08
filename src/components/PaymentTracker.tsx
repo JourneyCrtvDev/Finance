@@ -351,7 +351,7 @@ export const PaymentTracker: React.FC<PaymentTrackerProps> = ({ currentUserId, o
               <select
                 value={selectedProfileType}
                 onChange={e => setSelectedProfileType(e.target.value as 'business' | 'personal')}
-                className="w-full p-2 border rounded-lg mb-4"
+                className="w-full p-2 border rounded-lg mb-4 bg-light-glass dark:bg-dark-glass text-light-text dark:text-dark-text focus:outline-none focus:border-lime-accent/50 transition-colors duration-300"
               >
                 <option value="personal">Personal</option>
                 <option value="business">Business</option>
