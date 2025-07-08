@@ -42,6 +42,11 @@ export const Settings: React.FC = () => {
     reminderDays: 3
   });
 
+  const [displayName, setDisplayName] = useState("John Doe");
+  const [email, setEmail] = useState("john.doe@example.com");
+  const [profilePhoto, setProfilePhoto] = useState<string | null>(null);
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+
   const handleNotificationChange = (key: keyof typeof notifications) => {
     setNotifications(prev => ({ ...prev, [key]: !prev[key] }));
   };
@@ -52,6 +57,22 @@ export const Settings: React.FC = () => {
 
   const handlePreferenceChange = (key: keyof typeof preferences, value: string | number) => {
     setPreferences(prev => ({ ...prev, [key]: value }));
+  };
+
+  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPhotoPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+      setProfilePhoto(file.name);
+    }
+  };
+
+  const handleSaveProfile = () => {
+    alert(`Profile saved!\nName: ${displayName}\nEmail: ${email}\nPhoto: ${profilePhoto || "None"}`);
   };
 
   const exportData = () => {
@@ -94,6 +115,22 @@ export const Settings: React.FC = () => {
         className="bg-light-surface/50 dark:bg-dark-surface/50 backdrop-blur-sm border border-light-border dark:border-dark-border rounded-2xl p-6 shadow-glass"
       >
         <div className="flex items-center space-x-3 mb-6">
+          <div className="relative w-16 h-16 mr-4">
+            <label htmlFor="profile-photo-upload">
+              <img
+                src={photoPreview || "/default-avatar.png"}
+                alt="Profile"
+                className="w-16 h-16 rounded-full object-cover border border-light-border dark:border-dark-border cursor-pointer"
+              />
+              <input
+                id="profile-photo-upload"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handlePhotoChange}
+              />
+            </label>
+          </div>
           <User className="w-6 h-6 text-lime-accent" />
           <h3 className="text-xl font-bold text-light-text dark:text-dark-text font-editorial">Profile</h3>
         </div>
@@ -103,7 +140,8 @@ export const Settings: React.FC = () => {
             <label className="block text-sm text-light-text-secondary dark:text-dark-text-secondary mb-2">Display Name</label>
             <input
               type="text"
-              defaultValue="John Doe"
+              value={displayName}
+              onChange={e => setDisplayName(e.target.value)}
               className="w-full bg-light-glass dark:bg-dark-glass border border-light-border dark:border-dark-border rounded-lg px-3 py-2 text-light-text dark:text-dark-text focus:outline-none focus:border-lime-accent/50 transition-colors duration-300"
             />
           </div>
@@ -111,7 +149,8 @@ export const Settings: React.FC = () => {
             <label className="block text-sm text-light-text-secondary dark:text-dark-text-secondary mb-2">Email</label>
             <input
               type="email"
-              defaultValue="john.doe@example.com"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
               className="w-full bg-light-glass dark:bg-dark-glass border border-light-border dark:border-dark-border rounded-lg px-3 py-2 text-light-text dark:text-dark-text focus:outline-none focus:border-lime-accent/50 transition-colors duration-300"
             />
           </div>
@@ -121,6 +160,7 @@ export const Settings: React.FC = () => {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           className="mt-4 flex items-center space-x-2 bg-lime-accent text-light-base dark:text-dark-base px-4 py-2 rounded-lg font-medium hover:shadow-glow transition-all"
+          onClick={handleSaveProfile}
         >
           <Save className="w-4 h-4" />
           <span>Save Profile</span>
