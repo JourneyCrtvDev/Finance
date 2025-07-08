@@ -83,10 +83,13 @@ export const Settings: React.FC = () => {
       const updates: any = {
         id: user.id,
         display_name: displayName,
-        email: email,
       };
       // If photo is uploaded, upload to Supabase Storage (optional)
       if (photoPreview && profilePhoto) {
+        if (!supabase) {
+          alert('Supabase is not configured.');
+          return;
+        }
         // Upload to Supabase Storage (avatars bucket)
         const input = document.getElementById('profile-photo-upload') as HTMLInputElement | null;
         const file = input?.files?.[0];
@@ -102,7 +105,11 @@ export const Settings: React.FC = () => {
         }
       }
       // Update profile in Supabase
-      const { error } = await supabase.from('profiles').upsert(updates, { onConflict: ['id'] });
+      if (!supabase) {
+        alert('Supabase is not configured.');
+        return;
+      }
+      const { error } = await supabase.from('profiles').upsert(updates, { onConflict: 'id' });
       if (error) {
         alert('Profile update failed: ' + error.message);
       } else {
@@ -173,15 +180,6 @@ export const Settings: React.FC = () => {
               type="text"
               value={displayName}
               onChange={e => setDisplayName(e.target.value)}
-              className="w-full bg-light-glass dark:bg-dark-glass border border-light-border dark:border-dark-border rounded-lg px-3 py-2 text-light-text dark:text-dark-text focus:outline-none focus:border-lime-accent/50 transition-colors duration-300"
-            />
-          </div>
-          <div>
-            <label className="block text-sm text-light-text-secondary dark:text-dark-text-secondary mb-2">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
               className="w-full bg-light-glass dark:bg-dark-glass border border-light-border dark:border-dark-border rounded-lg px-3 py-2 text-light-text dark:text-dark-text focus:outline-none focus:border-lime-accent/50 transition-colors duration-300"
             />
           </div>
