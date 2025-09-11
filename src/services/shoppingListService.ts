@@ -3,6 +3,9 @@ import { ShoppingList, ShoppingItem } from '../types/shopping';
 
 export class ShoppingListService {
   static async getLists(userId: string): Promise<ShoppingList[]> {
+    if (!supabase) {
+      throw new Error('Database connection not available. Please check your configuration.');
+    }
     const { data, error } = await supabase
       .from('shopping_lists')
       .select('*')
@@ -13,6 +16,9 @@ export class ShoppingListService {
   }
 
   static async createList(userId: string, name: string, items: ShoppingItem[]): Promise<ShoppingList | null> {
+    if (!supabase) {
+      throw new Error('Database connection not available. Please check your configuration.');
+    }
     const { data, error } = await supabase
       .from('shopping_lists')
       .insert([{ user_id: userId, name, items }])
@@ -23,6 +29,9 @@ export class ShoppingListService {
   }
 
   static async updateList(listId: string, items: ShoppingItem[]): Promise<ShoppingList | null> {
+    if (!supabase) {
+      throw new Error('Database connection not available. Please check your configuration.');
+    }
     const { data, error } = await supabase
       .from('shopping_lists')
       .update({ items, updated_at: new Date().toISOString() })
@@ -34,6 +43,9 @@ export class ShoppingListService {
   }
 
   static async deleteList(listId: string): Promise<void> {
+    if (!supabase) {
+      throw new Error('Database connection not available. Please check your configuration.');
+    }
     const { error } = await supabase
       .from('shopping_lists')
       .delete()
@@ -42,6 +54,9 @@ export class ShoppingListService {
   }
 
   static async reuseList(userId: string, list: ShoppingList): Promise<ShoppingList | null> {
+    if (!supabase) {
+      throw new Error('Database connection not available. Please check your configuration.');
+    }
     // Duplicate the list with a new id and current timestamp
     const { data, error } = await supabase
       .from('shopping_lists')

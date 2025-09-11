@@ -123,7 +123,7 @@ export const ExchangeRates: React.FC = () => {
 
               {/* High/Low */}
               <div className="grid grid-cols-2 gap-2 text-sm">
-                <div>
+                <div className="pt-3 border-t border-light-border dark:border-dark-border">
                   <span className="text-light-text-secondary dark:text-dark-text-secondary">High: </span>
                   <span className="text-light-text dark:text-dark-text font-medium">{rate.high.toFixed(4)}</span>
                 </div>

@@ -238,7 +238,6 @@ export const SystemDashboard: React.FC = () => {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.3, delay: index * 0.05 }}
                   className={`p-4 rounded-xl border transition-all cursor-pointer ${getStatusColor(result.status)}`}
-                  onClick={() => setShowDetails(showDetails === result.component ? null : result.component)}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
@@ -259,22 +258,6 @@ export const SystemDashboard: React.FC = () => {
                       {getStatusIcon(result.status)}
                     </div>
                   </div>
-
-                  {/* Expandable Details */}
-                  <AnimatePresence>
-                    {showDetails === result.component && result.details && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        className="mt-4 pt-4 border-t border-light-border dark:border-dark-border"
-                      >
-                        <pre className="text-xs bg-light-glass dark:bg-dark-glass p-3 rounded-lg overflow-x-auto text-light-text dark:text-dark-text">
-                          {JSON.stringify(result.details, null, 2)}
-                        </pre>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
                 </motion.div>
               );
             })}

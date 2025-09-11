@@ -4,6 +4,10 @@ import { BudgetPlan, BudgetSummary, MonthlyPaymentPlan, PaymentItem } from '../t
 export class BudgetService {
   static async createBudgetPlan(plan: Omit<BudgetPlan, 'id' | 'created_at' | 'updated_at'>): Promise<BudgetPlan | null> {
     try {
+      if (!supabase) {
+        console.error('Supabase client not initialized');
+        return null;
+      }
       const { data, error } = await supabase
         .from('budget_plans')
         .insert([{
@@ -26,6 +30,10 @@ export class BudgetService {
 
   static async getBudgetPlan(userId: string, month: number, year: number): Promise<BudgetPlan | null> {
     try {
+      if (!supabase) {
+        console.error('Supabase client not initialized');
+        return null;
+      }
       const { data, error } = await supabase
         .from('budget_plans')
         .select('*')
@@ -46,6 +54,10 @@ export class BudgetService {
 
   static async updateBudgetPlan(plan: BudgetPlan): Promise<BudgetPlan | null> {
     try {
+      if (!supabase) {
+        console.error('Supabase client not initialized');
+        return null;
+      }
       const { data, error } = await supabase
         .from('budget_plans')
         .update({
@@ -70,6 +82,10 @@ export class BudgetService {
 
   static async getUserBudgetPlans(userId: string): Promise<BudgetPlan[]> {
     try {
+      if (!supabase) {
+        console.error('Supabase client not initialized');
+        return [];
+      }
       const { data, error } = await supabase
         .from('budget_plans')
         .select('*')
@@ -89,6 +105,10 @@ export class BudgetService {
 
   static async deleteBudgetPlan(planId: string): Promise<boolean> {
     try {
+      if (!supabase) {
+        console.error('Supabase client not initialized');
+        return false;
+      }
       const { error } = await supabase
         .from('budget_plans')
         .delete()
@@ -108,6 +128,10 @@ export class BudgetService {
 
   static async getLatestBudgetPlan(userId: string): Promise<BudgetPlan | null> {
     try {
+      if (!supabase) {
+        console.error('Supabase client not initialized');
+        return null;
+      }
       const { data, error } = await supabase
         .from('budget_plans')
         .select('*')
@@ -176,6 +200,10 @@ export class BudgetService {
   // Payment Plan Methods
   static async createPaymentPlan(plan: Omit<MonthlyPaymentPlan, 'id' | 'created_at' | 'updated_at'>): Promise<MonthlyPaymentPlan | null> {
     try {
+      if (!supabase) {
+        console.error('Supabase client not initialized');
+        return null;
+      }
       const { data, error } = await supabase
         .from('monthly_payment_plans')
         .insert([{
@@ -198,6 +226,10 @@ export class BudgetService {
 
   static async getPaymentPlan(userId: string, month: number, year: number): Promise<MonthlyPaymentPlan | null> {
     try {
+      if (!supabase) {
+        console.error('Supabase client not initialized');
+        return null;
+      }
       const { data, error } = await supabase
         .from('monthly_payment_plans')
         .select('*')
@@ -218,6 +250,10 @@ export class BudgetService {
 
   static async updatePaymentPlan(plan: MonthlyPaymentPlan): Promise<MonthlyPaymentPlan | null> {
     try {
+      if (!supabase) {
+        console.error('Supabase client not initialized');
+        return null;
+      }
       const { data, error } = await supabase
         .from('monthly_payment_plans')
         .update({
@@ -242,6 +278,10 @@ export class BudgetService {
 
   static async getUserPaymentPlans(userId: string): Promise<MonthlyPaymentPlan[]> {
     try {
+      if (!supabase) {
+        console.error('Supabase client not initialized');
+        return [];
+      }
       const { data, error } = await supabase
         .from('monthly_payment_plans')
         .select('*')

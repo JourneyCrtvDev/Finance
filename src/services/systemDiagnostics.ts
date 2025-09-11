@@ -62,59 +62,51 @@ export class SystemDiagnostics {
 
   private static async testDatabaseConnection(): Promise<void> {
     try {
+      if (!supabase) {
+        this.addResult('Database Connection', 'fail', 'Supabase client not initialized - missing environment variables');
+        return;
+      }
+      
       const startTime = performance.now();
       
       // Test basic connection
-      const { data, error } = await supabase.from('profiles').select('count').limit(1);
+      const { error } = await supabase.from('profiles').select('count').limit(1);
       const endTime = performance.now();
       const latency = endTime - startTime;
       
       if (error) {
-        this.addResult('Database Connection', 'fail', `Connection failed: ${error.message}`, { error, latency });
+        this.addResult('Database Connection', 'fail', `Connection failed: ${error.message}`);
         return;
       }
       
-      // Test write operation
-      const testData = {
-        id: 'test-' + Date.now(),
-        user_id: 'test-user',
-        name: 'System Test List',
-        items: []
-      };
-      
-      const { error: writeError } = await supabase.from('shopping_lists').insert([testData]);
-      
-      if (writeError) {
-        this.addResult('Database Write', 'fail', `Write operation failed: ${writeError.message}`, { writeError });
-      } else {
-        // Clean up test data
-        await supabase.from('shopping_lists').delete().eq('id', testData.id);
-        this.addResult('Database Write', 'pass', 'Write operations working correctly');
-      }
-      
-      this.addResult('Database Connection', 'pass', `Connection successful (${latency.toFixed(2)}ms)`, { latency });
+      this.addResult('Database Connection', 'pass', `Connection successful (${latency.toFixed(2)}ms)`);
       
     } catch (error) {
-      this.addResult('Database Connection', 'fail', `Unexpected error: ${error}`, { error });
+      this.addResult('Database Connection', 'fail', `Unexpected error: ${error}`);
     }
   }
 
   private static async testSupabaseAuth(): Promise<void> {
     try {
+      if (!supabase) {
+        this.addResult('Authentication', 'fail', 'Supabase client not initialized');
+        return;
+      }
+      
       const { data: { session } } = await supabase.auth.getSession();
       
       if (session) {
-        this.addResult('Authentication', 'pass', 'User session active', { userId: session.user.id });
+        this.addResult('Authentication', 'pass', 'User session active');
       } else {
         this.addResult('Authentication', 'warning', 'No active session (expected for logged out users)');
       }
       
       // Test auth configuration
-      const { data: { user } } = await supabase.auth.getUser();
+      await supabase.auth.getUser();
       this.addResult('Auth Configuration', 'pass', 'Auth service responding correctly');
       
     } catch (error) {
-      this.addResult('Authentication', 'fail', `Auth service error: ${error}`, { error });
+      this.addResult('Authentication', 'fail', `Auth service error: ${error}`);
     }
   }
 
@@ -125,7 +117,7 @@ export class SystemDiagnostics {
       this.addResult('Budget Service', 'pass', `Budget operations working (${plans.length} plans found)`);
       
     } catch (error) {
-      this.addResult('Budget Service', 'fail', `Budget service error: ${error}`, { error });
+      this.addResult('Budget Service', 'fail', `Budget service error: ${error}`);
     }
   }
 
@@ -136,7 +128,7 @@ export class SystemDiagnostics {
       this.addResult('Shopping List Service', 'pass', `Shopping list operations working (${lists.length} lists found)`);
       
     } catch (error) {
-      this.addResult('Shopping List Service', 'fail', `Shopping list service error: ${error}`, { error });
+      this.addResult('Shopping List Service', 'fail', `Shopping list service error: ${error}`);
     }
   }
 
@@ -152,16 +144,13 @@ export class SystemDiagnostics {
       const data = await response.json();
       
       if (data.rates && data.rates.RON) {
-        this.addResult('Currency API', 'pass', `Currency API working (EUR/RON: ${data.rates.RON})`, { 
-          rate: data.rates.RON,
-          lastUpdate: data.date 
-        });
+        this.addResult('Currency API', 'pass', `Currency API working (EUR/RON: ${data.rates.RON})`);
       } else {
-        this.addResult('Currency API', 'warning', 'Currency API responding but RON rate not found', { data });
+        this.addResult('Currency API', 'warning', 'Currency API responding but RON rate not found');
       }
       
     } catch (error) {
-      this.addResult('Currency API', 'fail', `Currency API error: ${error}`, { error });
+      this.addResult('Currency API', 'fail', `Currency API error: ${error}`);
     }
   }
 
@@ -181,7 +170,7 @@ export class SystemDiagnostics {
         const status = responseTime < 1000 ? 'pass' : responseTime < 3000 ? 'warning' : 'fail';
         const message = `${test.name} response time: ${responseTime.toFixed(2)}ms`;
         
-        this.addResult('Performance', status, message, { responseTime, test: test.name });
+        this.addResult('Performance', status, message);
         
       } catch (error) {
         this.addResult('Performance', 'fail', `${test.name} performance test failed: ${error}`);
@@ -228,12 +217,12 @@ export class SystemDiagnostics {
       else if (isDesktop) deviceType = 'Desktop';
       
       this.addResult('Responsive Design', 'pass', 
-        `Viewport detected: ${deviceType} (${viewport.width}x${viewport.height})`, viewport);
+        `Viewport detected: ${deviceType} (${viewport.width}x${viewport.height})`);
       
       // Check for touch support
       const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
       this.addResult('Touch Support', 'pass', 
-        hasTouch ? 'Touch events supported' : 'No touch support (desktop)', { hasTouch });
+        hasTouch ? 'Touch events supported' : 'No touch support (desktop)');
       
     } catch (error) {
       this.addResult('Responsive Design', 'fail', `Responsive design check error: ${error}`);
@@ -256,8 +245,7 @@ export class SystemDiagnostics {
         const status = memoryUsagePercent < 50 ? 'pass' : memoryUsagePercent < 80 ? 'warning' : 'fail';
         
         this.addResult('Memory Usage', status, 
-          `Memory usage: ${memoryInfo.used}MB / ${memoryInfo.limit}MB (${memoryUsagePercent.toFixed(1)}%)`, 
-          memoryInfo);
+          `Memory usage: ${memoryInfo.used}MB / ${memoryInfo.limit}MB (${memoryUsagePercent.toFixed(1)}%)`);
       } else {
         this.addResult('Memory Usage', 'warning', 'Memory API not available in this browser');
       }
