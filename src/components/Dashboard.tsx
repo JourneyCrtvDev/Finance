@@ -10,7 +10,7 @@ import { QuickActions } from './QuickActions';
 import { BudgetAnalytics } from './BudgetAnalytics';
 import { FinancialGoals } from './FinancialGoals';
 import { SmartNotifications } from './SmartNotifications';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 
 interface DashboardProps {
   onNavigateBack: () => void;
