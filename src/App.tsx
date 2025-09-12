@@ -14,6 +14,7 @@ import { Insights } from './components/Insights';
 import { AuthForm } from './components/AuthForm';
 import { getCurrentUser } from './lib/supabaseClient';
 import ShoppingListComponent from './components/ShoppingList';
+import { PWAInstallPrompt } from './components/PWAInstallPrompt';
 
 function App() {
   const [activeSection, setActiveSection] = useState('budget');
@@ -193,6 +194,9 @@ const AppContent: React.FC<{
           <MobileBottomNav activeSection={activeSection} onSectionChange={setActiveSection} />
         </div>
       </div>
+      
+      {/* PWA Install Prompt */}
+      <PWAInstallPrompt />
     </div>
   );
 };
