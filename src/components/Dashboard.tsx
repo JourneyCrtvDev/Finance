@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { PiggyBank, TrendingUp, Shield, Zap, Plus, Edit3, Calendar, ArrowLeft, LogOut, DollarSign, Save, Download, BarChart3, Target } from 'lucide-react';
 import { BudgetService } from '../services/budgetService';
 import { BudgetPlan, BudgetSummary } from '../types/budget';
