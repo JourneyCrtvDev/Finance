@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Plus, Trash2, Calendar } from 'lucide-react';
 import { ExpenseItem, DEFAULT_EXPENSE_CATEGORIES } from '../../types/budget';
@@ -31,10 +32,50 @@ export const BudgetExpenseStep: React.FC<BudgetExpenseStepProps> = ({
 }) => {
   const [customExpenseName, setCustomExpenseName] = React.useState('');
   const [customExpenseCategory, setCustomExpenseCategory] = React.useState<'fixed' | 'variable'>('variable');
+  const expenseSectionRef = useRef<HTMLDivElement>(null);
+  const [highlightedExpense, setHighlightedExpense] = React.useState<string | null>(null);
 
   const totalExpenses = expenseItems.reduce((sum, item) => sum + item.planned, 0);
   const leftoverAmount = totalIncome - totalExpenses;
 
+  // Smooth scroll to expense section with highlighting
+  const scrollToExpenseSection = (categoryName: string) => {
+    // First add the expense if it doesn't exist
+    const existingExpense = expenseItems.find(item => 
+      item.name.toLowerCase() === categoryName.toLowerCase()
+    );
+    
+    if (!existingExpense) {
+      // Determine category type
+      const isFixed = DEFAULT_EXPENSE_CATEGORIES.fixed.includes(categoryName);
+      const category = isFixed ? 'fixed' : 'variable';
+      
+      // Add the expense item
+      addExpenseItem(category, categoryName);
+    }
+    
+    // Scroll to the expense section after a brief delay to allow for state update
+    setTimeout(() => {
+      if (expenseSectionRef.current) {
+        const yOffset = -100; // Offset for fixed headers
+        const element = expenseSectionRef.current;
+        const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        
+        window.scrollTo({
+          top: y,
+          behavior: 'smooth'
+        });
+        
+        // Highlight the specific expense
+        setHighlightedExpense(categoryName);
+        
+        // Remove highlight after animation
+        setTimeout(() => {
+          setHighlightedExpense(null);
+        }, 2000);
+      }
+    }, 100);
+  };
   const addExpenseItem = (category: 'fixed' | 'variable', subcategory: string) => {
     const newItem: ExpenseItem = {
       id: Date.now().toString(),
@@ -95,7 +136,7 @@ export const BudgetExpenseStep: React.FC<BudgetExpenseStepProps> = ({
                 key={category}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={() => addExpenseItem('fixed', category)}
+                onClick={() => scrollToExpenseSection(category)}
                 className="p-2 md:p-3 bg-light-glass dark:bg-dark-glass border border-light-border dark:border-dark-border rounded-lg text-xs md:text-sm text-light-text dark:text-dark-text hover:border-lime-accent/30 transition-all text-center"
               >
                 <span className="block">+</span>
@@ -114,7 +155,7 @@ export const BudgetExpenseStep: React.FC<BudgetExpenseStepProps> = ({
                 key={category}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={() => addExpenseItem('variable', category)}
+                onClick={() => scrollToExpenseSection(category)}
                 className="p-2 md:p-3 bg-light-glass dark:bg-dark-glass border border-light-border dark:border-dark-border rounded-lg text-xs md:text-sm text-light-text dark:text-dark-text hover:border-lime-accent/30 transition-all text-center"
               >
                 <span className="block">+</span>
@@ -176,6 +217,11 @@ export const BudgetExpenseStep: React.FC<BudgetExpenseStepProps> = ({
                   onChange={(e) => setCustomExpenseName(e.target.value)}
                   placeholder="e.g., Gym Membership, Pet Care"
                   className="w-full bg-light-surface dark:bg-dark-surface border border-light-border dark:border-dark-border rounded-lg px-3 py-2 text-light-text dark:text-dark-text focus:outline-none focus:border-lime-accent/50 transition-colors duration-300"
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      addCustomExpenseItem();
+                    }
+                  }}
                 />
               </div>
               <div>
@@ -204,7 +250,7 @@ export const BudgetExpenseStep: React.FC<BudgetExpenseStepProps> = ({
 
         {/* Added Expenses */}
         {expenseItems.length > 0 && (
-          <div className="space-y-4">
+          <div ref={expenseSectionRef} className="space-y-4 scroll-mt-24" id="expense-section">
             <div className="flex items-center justify-between">
               <h4 className="text-lg font-semibold text-light-text dark:text-dark-text">Your Expenses</h4>
               {hasLoadedPreviousExpenses && (
@@ -219,7 +265,11 @@ export const BudgetExpenseStep: React.FC<BudgetExpenseStepProps> = ({
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-light-surface/50 dark:bg-dark-surface/50 border border-light-border dark:border-dark-border rounded-xl p-3 md:p-4"
+                className={`bg-light-surface/50 dark:bg-dark-surface/50 border rounded-xl p-3 md:p-4 transition-all duration-500 ${
+                  highlightedExpense && item.name.toLowerCase() === highlightedExpense.toLowerCase()
+                    ? 'border-lime-accent bg-lime-accent/10 shadow-glow'
+                    : 'border-light-border dark:border-dark-border'
+                }`}
               >
                 <div className="space-y-4">
                   <div>
