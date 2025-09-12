@@ -19,6 +19,7 @@ import {
 import { ThemeToggle } from './ThemeToggle';
 import { ColorPicker } from './ColorPicker';
 import { supabase, getCurrentUser } from '../lib/supabaseClient';
+import { DataExportService } from '../services/dataExportService';
 
 export const Settings: React.FC = () => {
   const [notifications, setNotifications] = useState({
@@ -46,12 +47,15 @@ export const Settings: React.FC = () => {
   const [email, setEmail] = useState("john.doe@example.com");
   const [profilePhoto, setProfilePhoto] = useState<string | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const [isExporting, setIsExporting] = useState(false);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
 
   // Load profile from Supabase on mount
   useEffect(() => {
     const fetchProfile = async () => {
       const user = await getCurrentUser();
       if (!user || !supabase) return;
+      setCurrentUserId(user.id);
       const { data, error } = await supabase.from('profiles').select('*').eq('id', user.id).single();
       if (!error && data) {
         if (data.display_name) setDisplayName(data.display_name);
@@ -133,9 +137,22 @@ export const Settings: React.FC = () => {
     }
   };
 
-  const exportData = () => {
-    // Placeholder for data export functionality
-    alert('Data export feature coming soon!');
+  const exportData = async () => {
+    if (!currentUserId) {
+      alert('You must be logged in to export data.');
+      return;
+    }
+
+    setIsExporting(true);
+    try {
+      await DataExportService.exportUserData(currentUserId);
+      alert('Your data has been exported successfully! Check your downloads folder for the Excel file.');
+    } catch (error) {
+      console.error('Export failed:', error);
+      alert('Failed to export data. Please try again.');
+    } finally {
+      setIsExporting(false);
+    }
   };
 
   const deleteAccount = () => {
@@ -411,10 +428,20 @@ export const Settings: React.FC = () => {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={exportData}
-            className="w-full flex items-center justify-center space-x-2 bg-light-glass dark:bg-dark-glass border border-light-border dark:border-dark-border px-4 py-3 rounded-lg text-light-text dark:text-dark-text hover:border-lime-accent/30 transition-all"
+            disabled={isExporting}
+            className="w-full flex items-center justify-center space-x-2 bg-light-glass dark:bg-dark-glass border border-light-border dark:border-dark-border px-4 py-3 rounded-lg text-light-text dark:text-dark-text hover:border-lime-accent/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <Download className="w-4 h-4" />
-            <span>Export My Data</span>
+            {isExporting ? (
+              <>
+                <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                <span>Exporting...</span>
+              </>
+            ) : (
+              <>
+                <Download className="w-4 h-4" />
+                <span>Export My Data</span>
+              </>
+            )}
           </motion.button>
 
           <motion.button
