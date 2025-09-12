@@ -8,13 +8,9 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: 'index.html',
-      external: [
-        '@capacitor/status-bar',
-        '@capacitor/splash-screen'
-      ]
     }
   },
   optimizeDeps: {
-    exclude: ['lucide-react', '@capacitor/status-bar', '@capacitor/splash-screen'],
+    exclude: ['lucide-react'],
   },
 });
