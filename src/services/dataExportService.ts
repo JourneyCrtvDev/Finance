@@ -528,5 +528,4 @@ export class DataExportService {
     console.error('Error exporting summary:', error);
     throw new Error('Failed to export summary. Please try again.');
   }
-  }
 }
