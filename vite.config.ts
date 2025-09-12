@@ -7,7 +7,11 @@ export default defineConfig({
   root: '.',
   build: {
     rollupOptions: {
-      input: 'index.html'
+      input: 'index.html',
+      external: [
+        '@capacitor/status-bar',
+        '@capacitor/splash-screen'
+      ]
     }
   },
   optimizeDeps: {
