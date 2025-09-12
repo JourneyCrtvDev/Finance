@@ -15,6 +15,8 @@ import { AuthForm } from './components/AuthForm';
 import { getCurrentUser } from './lib/supabaseClient';
 import ShoppingListComponent from './components/ShoppingList';
 import { PWAInstallPrompt } from './components/PWAInstallPrompt';
+import { NativeFeatures } from './components/NativeFeatures';
+import { useCapacitor } from './hooks/useCapacitor';
 
 function App() {
   const [activeSection, setActiveSection] = useState('budget');
@@ -151,6 +153,8 @@ const AppContent: React.FC<{
   onSignOut: () => void;
   currentUserId: string | null;
 }> = ({ activeSection, setActiveSection, renderMainContent, onSignOut }) => {
+  const { isNative } = useCapacitor();
+
   return (
     <div className="min-h-screen bg-light-base dark:bg-dark-base text-light-text dark:text-dark-text font-editorial transition-colors duration-300">
       {/* Background Effects */}
@@ -174,6 +178,7 @@ const AppContent: React.FC<{
           {/* Content Area */}
           <div className="flex-1 overflow-auto pb-24 md:pb-8 pt-4 md:pt-0">
             <div className="p-3 md:p-8">
+              {isNative && <NativeFeatures />}
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeSection}
