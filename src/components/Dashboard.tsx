@@ -6,12 +6,18 @@ import { BudgetPlan, BudgetSummary } from '../types/budget';
 import { signOut } from '../lib/supabaseClient';
 import { BudgetPlanSelector } from './BudgetPlanSelector';
 import { DataExportService } from '../services/dataExportService';
+import { QuickActions } from './QuickActions';
+import { BudgetAnalytics } from './BudgetAnalytics';
+import { FinancialGoals } from './FinancialGoals';
+import { SmartNotifications } from './SmartNotifications';
+import { AnimatePresence } from 'framer-motion';
 
 interface DashboardProps {
   onNavigateBack: () => void;
   onEditBudget: (plan: BudgetPlan) => void;
   onSignOut: () => void;
   currentUserId: string | null;
+  onSectionChange: (section: string) => void;
 }
 
 // Romanian Lei currency symbol component
@@ -19,7 +25,7 @@ const LeiIcon: React.FC<{ className?: string }> = ({ className = "w-4 h-4" }) =>
   <span className={`font-bold ${className.replace('w-4 h-4', 'text-xs')}`}>RON</span>
 );
 
-export const Dashboard: React.FC<DashboardProps> = ({ onNavigateBack, onEditBudget, onSignOut, currentUserId }) => {
+export const Dashboard: React.FC<DashboardProps> = ({ onNavigateBack, onEditBudget, onSignOut, currentUserId, onSectionChange }) => {
   const [budgetPlans, setBudgetPlans] = useState<BudgetPlan[]>([]);
   const [currentPlan, setCurrentPlan] = useState<BudgetPlan | null>(null);
   const [summary, setSummary] = useState<BudgetSummary | null>(null);
@@ -29,6 +35,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigateBack, onEditBudg
   const [tempActualAmount, setTempActualAmount] = useState<number>(0);
   const [isSavingActual, setIsSavingActual] = useState(false);
   const [isExportingBudget, setIsExportingBudget] = useState(false);
+  const [activeTab, setActiveTab] = useState<'overview' | 'analytics' | 'goals'>('overview');
 
   useEffect(() => {
     if (currentUserId) {
@@ -276,6 +283,52 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigateBack, onEditBudg
         />
       </motion.div>
 
+      {/* Tab Navigation */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        className="flex items-center bg-light-glass dark:bg-dark-glass border border-light-border dark:border-dark-border rounded-xl p-1"
+      >
+        {[
+          { id: 'overview', label: 'Overview', icon: BarChart3 },
+          { id: 'analytics', label: 'Analytics', icon: TrendingUp },
+          { id: 'goals', label: 'Goals', icon: Target }
+        ].map((tab) => (
+          <motion.button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id as any)}
+            className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all flex-1 justify-center ${
+              activeTab === tab.id
+                ? 'bg-lime-accent text-light-base dark:text-dark-base shadow-glow'
+                : 'text-light-text-secondary dark:text-dark-text-secondary hover:text-light-text dark:hover:text-dark-text'
+            }`}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <tab.icon className="w-4 h-4" />
+            <span className="font-medium">{tab.label}</span>
+          </motion.button>
+        ))}
+      </motion.div>
+
+      {/* Tab Content */}
+      <AnimatePresence mode="wait">
+        {activeTab === 'overview' && (
+          <motion.div
+            key="overview"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.3 }}
+            className="space-y-6"
+          >
+            {/* Quick Actions */}
+            <QuickActions onAction={onSectionChange} />
+
+            {/* Smart Notifications */}
+            <SmartNotifications currentUserId={currentUserId} onNavigateToSection={onSectionChange} />
+
       {/* Overview Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
         <motion.div
@@ -521,6 +574,33 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigateBack, onEditBudg
           </div>
         </motion.div>
       </div>
+          </motion.div>
+        )}
+
+        {activeTab === 'analytics' && (
+          <motion.div
+            key="analytics"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.3 }}
+          >
+            <BudgetAnalytics currentUserId={currentUserId} currentPlan={currentPlan} />
+          </motion.div>
+        )}
+
+        {activeTab === 'goals' && (
+          <motion.div
+            key="goals"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.3 }}
+          >
+            <FinancialGoals currentUserId={currentUserId} />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

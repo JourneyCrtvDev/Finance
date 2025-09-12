@@ -111,6 +111,7 @@ function App() {
             onEditBudget={handleEditBudget}
             onSignOut={handleSignOut} 
             currentUserId={currentUserId}
+            onSectionChange={setActiveSection}
           />
         );
       case 'exchange':
