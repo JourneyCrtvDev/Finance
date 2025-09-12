@@ -82,6 +82,11 @@ export const BudgetSetupForm: React.FC<BudgetSetupFormProps> = ({ onNavigateToDa
   };
 
   const handleSubmit = async () => {
+    if (!currentUserId) {
+      alert('User not authenticated. Please sign in again.');
+      return;
+    }
+    
     setIsLoading(true);
     try {
       let result;
@@ -103,7 +108,7 @@ export const BudgetSetupForm: React.FC<BudgetSetupFormProps> = ({ onNavigateToDa
         // Create new plan
         const currentDate = new Date();
         const budgetPlan = {
-          user_id: currentUserId || 'demo-user', // Use actual user ID or fallback for demo mode
+          user_id: currentUserId,
           month: currentDate.getMonth() + 1,
           year: currentDate.getFullYear(),
           name: budgetName || `Budget ${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`,

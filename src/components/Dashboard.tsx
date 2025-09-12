@@ -29,14 +29,17 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigateBack, onEditBudg
   const [isSavingActual, setIsSavingActual] = useState(false);
 
   useEffect(() => {
-    loadBudgetPlans();
-  }, []);
+    if (currentUserId) {
+      loadBudgetPlans();
+    }
+  }, [currentUserId]);
 
   const loadBudgetPlans = async () => {
+    if (!currentUserId) return;
+    
     setIsLoading(true);
     try {
-      // Use actual user ID or fallback for demo mode
-      const plans = await BudgetService.getUserBudgetPlans(currentUserId || 'demo-user');
+      const plans = await BudgetService.getUserBudgetPlans(currentUserId);
       setBudgetPlans(plans);
       
       if (plans.length > 0) {

@@ -43,22 +43,26 @@ export const PaymentTracker: React.FC<PaymentTrackerProps> = ({ currentUserId, o
   const [selectedProfileType, setSelectedProfileType] = useState<'business' | 'personal'>('personal');
 
   useEffect(() => {
-    loadPaymentPlan();
+    if (currentUserId) {
+      loadPaymentPlan();
+    }
   }, [currentUserId]);
 
   const loadPaymentPlan = async () => {
+    if (!currentUserId) return;
+    
     setIsLoading(true);
     try {
       const currentDate = new Date();
       const month = currentDate.getMonth() + 1;
       const year = currentDate.getFullYear();
       
-      let plan = await BudgetService.getPaymentPlan(currentUserId || 'demo-user', month, year);
+      let plan = await BudgetService.getPaymentPlan(currentUserId, month, year);
       
       if (!plan) {
         // Create a new payment plan for this month
         const newPlan = {
-          user_id: currentUserId || 'demo-user',
+          user_id: currentUserId,
           month,
           year,
           name: `Payment Tracker ${month}/${year}`,
