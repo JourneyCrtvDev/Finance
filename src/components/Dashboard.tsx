@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { PiggyBank, TrendingUp, Shield, Zap, Plus, Edit3, Calendar, ArrowLeft, LogOut, DollarSign, Save } from 'lucide-react';
+import { PiggyBank, TrendingUp, Shield, Zap, Plus, Edit3, Calendar, ArrowLeft, LogOut, DollarSign, Save, Download } from 'lucide-react';
 import { BudgetService } from '../services/budgetService';
 import { BudgetPlan, BudgetSummary } from '../types/budget';
 import { signOut } from '../lib/supabaseClient';
 import { BudgetPlanSelector } from './BudgetPlanSelector';
+import { DataExportService } from '../services/dataExportService';
 
 interface DashboardProps {
   onNavigateBack: () => void;
@@ -27,6 +28,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigateBack, onEditBudg
   const [editingExpenseId, setEditingExpenseId] = useState<string | null>(null);
   const [tempActualAmount, setTempActualAmount] = useState<number>(0);
   const [isSavingActual, setIsSavingActual] = useState(false);
+  const [isExportingBudget, setIsExportingBudget] = useState(false);
 
   useEffect(() => {
     if (currentUserId) {
@@ -117,6 +119,21 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigateBack, onEditBudg
     setTempActualAmount(0);
   };
 
+  const handleExportCurrentBudget = async () => {
+    if (!currentPlan) return;
+    
+    setIsExportingBudget(true);
+    try {
+      await DataExportService.exportBudgetPlanOnly(currentPlan);
+      alert('Budget plan exported successfully! Check your downloads folder.');
+    } catch (error) {
+      console.error('Export failed:', error);
+      alert('Failed to export budget plan. Please try again.');
+    } finally {
+      setIsExportingBudget(false);
+    }
+  };
+
   const handleSignOut = async () => {
     setIsSigningOut(true);
     await signOut();
@@ -195,6 +212,20 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigateBack, onEditBudg
           </div>
         </div>
         <div className="flex items-center space-x-3">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={handleExportCurrentBudget}
+            disabled={isExportingBudget}
+            className="flex items-center space-x-2 bg-light-glass dark:bg-dark-glass border border-light-border dark:border-dark-border px-4 py-2 rounded-xl text-light-text dark:text-dark-text hover:border-lime-accent/30 transition-all disabled:opacity-50"
+          >
+            {isExportingBudget ? (
+              <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+            ) : (
+              <Download className="w-4 h-4" />
+            )}
+            <span className="hidden sm:inline">{isExportingBudget ? 'Exporting...' : 'Export'}</span>
+          </motion.button>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
