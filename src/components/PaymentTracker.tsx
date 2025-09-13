@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Calendar, 
@@ -42,6 +43,8 @@ export const PaymentTracker: React.FC<PaymentTrackerProps> = ({ currentUserId, o
   });
   const [selectedProfileType, setSelectedProfileType] = useState<'business' | 'personal'>('personal');
 
+  const addFormRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     if (currentUserId) {
       loadPaymentPlan();
@@ -81,6 +84,19 @@ export const PaymentTracker: React.FC<PaymentTrackerProps> = ({ currentUserId, o
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleShowAddForm = () => {
+    setShowAddForm(true);
+    // Scroll to the form after a brief delay to allow for state update
+    setTimeout(() => {
+      if (addFormRef.current) {
+        addFormRef.current.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    }, 100);
   };
 
   const handleAddPayment = async () => {
@@ -263,7 +279,7 @@ export const PaymentTracker: React.FC<PaymentTrackerProps> = ({ currentUserId, o
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          onClick={() => setShowAddForm(true)}
+          onClick={handleShowAddForm}
           className="flex items-center space-x-2 bg-lime-accent text-light-base dark:text-dark-base px-4 py-2 rounded-xl font-medium hover:shadow-glow transition-all"
         >
           <Plus className="w-4 h-4" />
@@ -344,10 +360,11 @@ export const PaymentTracker: React.FC<PaymentTrackerProps> = ({ currentUserId, o
       <AnimatePresence>
         {showAddForm && (
           <motion.div
+            ref={addFormRef}
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="bg-light-surface/50 dark:bg-dark-surface/50 backdrop-blur-sm border border-light-border dark:border-dark-border rounded-2xl p-6 shadow-glass"
+            className="bg-light-surface/50 dark:bg-dark-surface/50 backdrop-blur-sm border border-light-border dark:border-dark-border rounded-2xl p-6 shadow-glass scroll-mt-24"
           >
             <h3 className="text-xl font-bold text-light-text dark:text-dark-text font-editorial mb-4">Add New Payment</h3>
             <div className="mb-6">
