@@ -172,7 +172,7 @@ export const ShoppingListComponent: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 overflow-x-hidden max-w-full">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}

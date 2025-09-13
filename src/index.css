@@ -12,10 +12,12 @@
 /* Ensure no white space at bottom on mobile */
 html, body {
   overflow-x: hidden;
+  max-width: 100vw;
 }
 
 body {
   background-color: #FAFAFA;
+  position: relative;
 }
 
 .dark body {
@@ -71,11 +73,34 @@ body {
   -webkit-overflow-scrolling: touch;
 }
 
+/* Prevent horizontal overflow on all elements */
+* {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Ensure containers don't overflow */
+.container, .max-w-full, [class*="max-w-"] {
+  overflow-x: hidden;
+}
+
 /* Improve touch targets for mobile */
 @media (max-width: 768px) {
   button, [role="button"] {
     min-height: 44px; /* iOS recommended minimum touch target */
     min-width: 44px;
+  }
+  
+  /* Prevent horizontal scrolling on mobile */
+  body, html, #root {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+  }
+  
+  /* Ensure all containers respect viewport width */
+  .container, .w-full, .max-w-full {
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
   }
 }
 

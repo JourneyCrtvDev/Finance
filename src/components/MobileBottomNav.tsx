@@ -36,7 +36,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeSection,
   };
 
   return (
-    <>
+    <div className="overflow-x-hidden">
       {/* More Menu Modal */}
       <AnimatePresence>
         {showMoreMenu && (
@@ -66,7 +66,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeSection,
                 </div>
               )}
               
-              <div className="px-6 pb-6">
+              <div className="px-6 pb-6 overflow-x-hidden">
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="text-lg font-bold text-light-text dark:text-dark-text font-editorial">More Options</h3>
                   <motion.button
@@ -158,6 +158,6 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeSection,
           })}
         </div>
       </motion.div>
-    </>
+    </div>
   );
 };

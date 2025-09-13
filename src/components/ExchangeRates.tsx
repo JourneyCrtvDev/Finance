@@ -56,7 +56,7 @@ export const ExchangeRates: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 overflow-x-hidden max-w-full">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -79,7 +79,7 @@ export const ExchangeRates: React.FC = () => {
       </motion.div>
 
       {/* Rates Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 overflow-x-hidden">
         {exchangeRates.map((rate, index) => (
           <motion.div
             key={rate.pair}
@@ -87,7 +87,7 @@ export const ExchangeRates: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
             whileHover={{ scale: 1.02 }}
-            className="bg-light-surface/50 dark:bg-dark-surface/50 backdrop-blur-sm border border-light-border dark:border-dark-border rounded-xl p-4 md:p-6 hover:border-lime-accent/30 transition-all hover:shadow-glow duration-300"
+            className="bg-light-surface/50 dark:bg-dark-surface/50 backdrop-blur-sm border border-light-border dark:border-dark-border rounded-xl p-4 md:p-6 hover:border-lime-accent/30 transition-all hover:shadow-glow duration-300 overflow-x-hidden max-w-full"
           >
             {/* Pair Header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 space-y-2 sm:space-y-0">

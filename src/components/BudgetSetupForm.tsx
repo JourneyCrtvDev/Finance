@@ -209,7 +209,7 @@ export const BudgetSetupForm: React.FC<BudgetSetupFormProps> = ({ onNavigateToDa
     );
   }
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 overflow-x-hidden max-w-full">
       {/* Success Message */}
       {showSuccessMessage && (
         <motion.div
@@ -227,6 +227,7 @@ export const BudgetSetupForm: React.FC<BudgetSetupFormProps> = ({ onNavigateToDa
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
+        className="overflow-x-hidden"
       >
         <h2 className="text-3xl font-bold text-light-text dark:text-dark-text font-editorial">
           {isEditing ? 'Edit Budget Plan' : 'Create Budget Plan'}
@@ -252,7 +253,7 @@ export const BudgetSetupForm: React.FC<BudgetSetupFormProps> = ({ onNavigateToDa
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="bg-light-surface dark:bg-dark-surface rounded-2xl p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto"
+            className="bg-light-surface dark:bg-dark-surface rounded-2xl p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto overflow-x-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-4">
@@ -282,7 +283,7 @@ export const BudgetSetupForm: React.FC<BudgetSetupFormProps> = ({ onNavigateToDa
       )}
 
       {/* Progress Steps */}
-      <div className="flex items-center justify-center space-x-1 md:space-x-4 mb-6 md:mb-8 px-4">
+      <div className="flex items-center justify-center space-x-1 md:space-x-4 mb-6 md:mb-8 px-4 overflow-x-hidden">
         {[1, 2, 3].map((step) => (
           <div key={step} className="flex items-center">
             <div className={`w-6 h-6 md:w-10 md:h-10 rounded-full flex items-center justify-center font-bold transition-all text-xs md:text-base ${
@@ -302,7 +303,7 @@ export const BudgetSetupForm: React.FC<BudgetSetupFormProps> = ({ onNavigateToDa
       </div>
 
       {/* Form Content */}
-      <div className="bg-light-surface/50 dark:bg-dark-surface/50 backdrop-blur-sm border border-light-border dark:border-dark-border rounded-2xl p-4 md:p-8 shadow-glass transition-colors duration-300">
+      <div className="bg-light-surface/50 dark:bg-dark-surface/50 backdrop-blur-sm border border-light-border dark:border-dark-border rounded-2xl p-4 md:p-8 shadow-glass transition-colors duration-300 overflow-x-hidden max-w-full">
         {/* Database Connection Warning */}
         {(!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) && (
           <motion.div
@@ -324,6 +325,7 @@ export const BudgetSetupForm: React.FC<BudgetSetupFormProps> = ({ onNavigateToDa
           </motion.div>
         )}
 
+        <div className="overflow-x-hidden max-w-full">
         {currentStep === 1 && (
           <BudgetIncomeStep
             budgetName={budgetName}
@@ -351,6 +353,7 @@ export const BudgetSetupForm: React.FC<BudgetSetupFormProps> = ({ onNavigateToDa
             leftoverAmount={leftoverAmount}
           />
         )}
+        </div>
 
         {/* Navigation Buttons */}
         <div className="flex flex-col sm:flex-row justify-between mt-6 md:mt-8 pt-4 md:pt-6 border-t border-light-border dark:border-dark-border gap-3 sm:gap-4">
