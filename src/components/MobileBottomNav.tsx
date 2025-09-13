@@ -216,7 +216,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeSection,
                       : 'bg-light-glass dark:bg-dark-glass text-light-text dark:text-dark-text'
                   }`}
                 >
-                  <SettingsIcon className="w-5 h-5" />
+                  <Settings className="w-5 h-5" />
                   <span className="text-xs font-medium">Settings</span>
                 </motion.button>
               </div>
