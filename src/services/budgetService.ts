@@ -127,6 +127,27 @@ export class BudgetService {
     }
   }
 
+  static async getBudgetPlan(userId: string, month: number, year: number): Promise<BudgetPlan | null> {
+    const { data, error } = await supabase
+      .from('budget_plans')
+      .select('*')
+      .eq('user_id', userId)
+      .eq('month', month)
+      .eq('year', year)
+      .single();
+
+    if (error) {
+      if (error.code === 'PGRST116') {
+        // No rows found - this is expected when no plan exists
+        return null;
+      }
+      console.error('Error fetching budget plan:', error);
+      throw error;
+    }
+
+    return data;
+  }
+
   static async getLatestBudgetPlan(userId: string): Promise<BudgetPlan | null> {
     try {
       if (!supabase) {

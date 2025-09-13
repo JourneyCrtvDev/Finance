@@ -32,11 +32,45 @@ export const BudgetSetupForm: React.FC<BudgetSetupFormProps> = ({ onNavigateToDa
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [hasLoadedPreviousExpenses, setHasLoadedPreviousExpenses] = useState(false);
   const [isLoadingPrevious, setIsLoadingPrevious] = useState(false);
+  const [currentPlan, setCurrentPlan] = useState<BudgetPlan | null>(editingPlan);
+  const [isCheckingExisting, setIsCheckingExisting] = useState(false);
 
   const [showConnectionTest, setShowConnectionTest] = useState(false);
 
-  const isEditing = !!editingPlan;
+  const isEditing = !!currentPlan;
+  const isTrulyNew = !editingPlan && !currentPlan;
 
+  // Check for existing budget plan on component mount
+  useEffect(() => {
+    const checkExistingPlan = async () => {
+      if (!currentUserId || editingPlan || isCheckingExisting) return;
+      
+      setIsCheckingExisting(true);
+      try {
+        const currentDate = new Date();
+        const month = currentDate.getMonth() + 1;
+        const year = currentDate.getFullYear();
+        
+        const existingPlan = await BudgetService.getBudgetPlan(currentUserId, month, year);
+        
+        if (existingPlan) {
+          // Load existing plan for editing
+          setCurrentPlan(existingPlan);
+          setBudgetName(existingPlan.name);
+          setIncomeItems(existingPlan.income_items || [{ id: '1', name: 'Main Salary', amount: 0, type: 'main' }]);
+          setExpenseItems(existingPlan.expense_items || []);
+          setAllocationTargets(existingPlan.allocation_targets || DEFAULT_ALLOCATIONS);
+        }
+      } catch (error) {
+        console.error('Error checking for existing plan:', error);
+        // Continue with new plan creation if check fails
+      } finally {
+        setIsCheckingExisting(false);
+      }
+    };
+
+    checkExistingPlan();
+  }, [currentUserId, editingPlan]);
   // Scroll to top when step changes
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -110,11 +144,11 @@ export const BudgetSetupForm: React.FC<BudgetSetupFormProps> = ({ onNavigateToDa
     try {
       let result;
       
-      if (isEditing && editingPlan) {
+      if (isEditing && currentPlan) {
         // Update existing plan
         const updatedPlan: BudgetPlan = {
-          ...editingPlan,
-          name: budgetName || editingPlan.name,
+          ...currentPlan,
+          name: budgetName || currentPlan.name,
           income_items: incomeItems,
           expense_items: expenseItems.map(item => ({ ...item, amount: item.planned })),
           allocation_targets: allocationTargets,
@@ -161,6 +195,19 @@ export const BudgetSetupForm: React.FC<BudgetSetupFormProps> = ({ onNavigateToDa
     }
   };
 
+  // Show loading state while checking for existing plan
+  if (isCheckingExisting) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <div className="w-8 h-8 border-2 border-lime-accent border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-light-text-secondary dark:text-dark-text-secondary">
+            Checking for existing budget plan...
+          </p>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="space-y-6">
       {/* Success Message */}
@@ -186,6 +233,11 @@ export const BudgetSetupForm: React.FC<BudgetSetupFormProps> = ({ onNavigateToDa
         </h2>
         <p className="text-light-text-secondary dark:text-dark-text-secondary mt-1">
           {isEditing ? 'Update your budget plan details' : 'Set up your monthly budget in 3 easy steps'}
+          {currentPlan && !editingPlan && (
+            <span className="block text-sm text-lime-accent mt-1">
+              Found existing plan for this month - editing instead of creating new
+            </span>
+          )}
         </p>
       </motion.div>
 
@@ -285,7 +337,7 @@ export const BudgetSetupForm: React.FC<BudgetSetupFormProps> = ({ onNavigateToDa
             expenseItems={expenseItems}
             setExpenseItems={setExpenseItems}
             totalIncome={totalIncome}
-            isEditing={isEditing}
+            isEditing={!isTrulyNew}
             hasLoadedPreviousExpenses={hasLoadedPreviousExpenses}
             setHasLoadedPreviousExpenses={setHasLoadedPreviousExpenses}
             onLoadPreviousExpenses={loadPreviousMonthExpenses}
