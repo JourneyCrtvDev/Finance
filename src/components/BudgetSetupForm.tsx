@@ -7,6 +7,7 @@ import { BudgetPlan, IncomeItem, ExpenseItem, AllocationTarget } from '../types/
 import { BudgetIncomeStep } from './budget/BudgetIncomeStep';
 import { BudgetExpenseStep } from './budget/BudgetExpenseStep';
 import { BudgetAllocationStep } from './budget/BudgetAllocationStep';
+import { supabase } from '../lib/supabaseClient';
 
 interface BudgetSetupFormProps {
   onNavigateToDashboard: () => void;
@@ -84,6 +85,12 @@ export const BudgetSetupForm: React.FC<BudgetSetupFormProps> = ({ onNavigateToDa
   const handleSubmit = async () => {
     if (!currentUserId) {
       alert('User not authenticated. Please sign in again.');
+      return;
+    }
+    
+    // Check if Supabase is configured
+    if (!supabase) {
+      alert('Database not connected. Please click "Connect to Supabase" in the top right corner to set up your database connection.');
       return;
     }
     

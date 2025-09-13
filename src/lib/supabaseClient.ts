@@ -8,7 +8,10 @@ const isDevelopment = import.meta.env.DEV;
 const hasCredentials = supabaseUrl && supabaseAnonKey;
 
 if (!hasCredentials && isDevelopment) {
-  console.warn('⚠️ Supabase credentials are missing. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your .env file.');
+  console.error('❌ Supabase credentials are missing. Database operations will fail.');
+  console.log('To fix this:');
+  console.log('1. Click "Connect to Supabase" button in the top right');
+  console.log('2. Or manually add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to your .env file');
 }
 
 // Create client with fallback values to prevent immediate crashes

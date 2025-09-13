@@ -5,7 +5,8 @@ export class BudgetService {
   static async createBudgetPlan(plan: Omit<BudgetPlan, 'id' | 'created_at' | 'updated_at'>): Promise<BudgetPlan | null> {
     try {
       if (!supabase) {
-        console.error('Supabase client not initialized');
+        console.error('❌ Database not connected. Please connect to Supabase first.');
+        alert('Database not connected. Please click "Connect to Supabase" in the top right corner to set up your database.');
         return null;
       }
       const { data, error } = await supabase
