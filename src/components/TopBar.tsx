@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Bell, Globe, LogOut } from 'lucide-react';
+import { Bell, Globe } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 import { ColorPicker } from './ColorPicker';
 import { NotificationCenter, useNotifications } from './NotificationCenter';
@@ -10,7 +10,6 @@ interface TopBarProps {
 }
 
 export const TopBar: React.FC<TopBarProps> = ({ onSignOut }) => {
-  const [isSigningOut, setIsSigningOut] = React.useState(false);
   const [showNotifications, setShowNotifications] = React.useState(false);
   const { 
     notifications, 
@@ -20,13 +19,6 @@ export const TopBar: React.FC<TopBarProps> = ({ onSignOut }) => {
     deleteNotification 
   } = useNotifications();
 
-  const handleSignOut = async () => {
-    setIsSigningOut(true);
-    setTimeout(() => {
-      setIsSigningOut(false);
-      onSignOut();
-    }, 500);
-  };
 
   const handleNotificationClick = () => {
     setShowNotifications(!showNotifications);
@@ -88,20 +80,6 @@ export const TopBar: React.FC<TopBarProps> = ({ onSignOut }) => {
             </motion.button>
           </div>
 
-          {/* Sign Out Button */}
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={handleSignOut}
-            disabled={isSigningOut}
-            className="hidden sm:flex items-center space-x-2 p-2 bg-light-glass dark:bg-dark-glass rounded-full hover:bg-red-400/10 hover:text-red-400 transition-colors duration-300 disabled:opacity-50"
-          >
-            {isSigningOut ? (
-              <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin" />
-            ) : (
-              <LogOut className="w-5 h-5 text-light-text dark:text-dark-text" />
-            )}
-          </motion.button>
 
           {/* User avatar */}
           <motion.div

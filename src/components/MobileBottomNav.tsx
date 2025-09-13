@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calculator, TrendingUp, BarChart3, Settings, CreditCard, PieChart, MoreHorizontal, ShoppingBag, X } from 'lucide-react';
-import { THEME_COLORS, applyThemeColor } from '../constants/colors';
+import { Calculator, TrendingUp, BarChart3, CreditCard, PieChart, MoreHorizontal, ShoppingBag, Settings, X } from 'lucide-react';
 import { useCapacitor } from '../hooks/useCapacitor';
 
 interface MobileBottomNavProps {
@@ -61,9 +60,11 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeSection,
               }`}
             >
               {/* Handle bar for iOS-style interaction */}
-              <div className="flex justify-center pt-3 pb-2">
-                <div className="w-12 h-1 bg-light-border dark:bg-dark-border rounded-full" />
-              </div>
+              {isIOS && (
+                <div className="flex justify-center pt-3 pb-2">
+                  <div className="w-12 h-1 bg-light-border dark:bg-dark-border rounded-full" />
+                </div>
+              )}
               
               <div className="px-6 pb-6">
                 <div className="flex items-center justify-between mb-6">
@@ -88,7 +89,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeSection,
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={() => handleMoreItemClick(item.id)}
-                      className={`flex flex-col items-center space-y-3 p-6 rounded-xl border-2 transition-all ${
+                      className={`flex flex-col items-center space-y-3 p-6 rounded-xl border-2 transition-all min-h-[100px] ${
                         activeSection === item.id
                           ? 'border-lime-accent bg-lime-accent/10 text-lime-accent'
                           : 'border-light-border dark:border-dark-border bg-light-glass dark:bg-dark-glass text-light-text dark:text-dark-text hover:border-lime-accent/30'
@@ -131,7 +132,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeSection,
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={item.id === 'more' ? handleMoreClick : () => onSectionChange(item.id)}
-                className={`flex flex-col items-center space-y-1 px-3 py-2 rounded-lg transition-all min-w-0 ${
+                className={`flex flex-col items-center space-y-1 px-3 py-2 rounded-lg transition-all min-w-0 min-h-[44px] ${
                   isActive
                     ? 'text-lime-accent bg-lime-accent/10'
                     : 'text-light-text-secondary dark:text-dark-text-secondary hover:text-lime-accent hover:bg-lime-accent/5'

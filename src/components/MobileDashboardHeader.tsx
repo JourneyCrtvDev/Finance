@@ -173,25 +173,6 @@ export const MobileDashboardHeader: React.FC<MobileDashboardHeaderProps> = ({
               </>
             )}
 
-            {/* Sign Out */}
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => {
-                onSignOut();
-                setShowMenu(false);
-              }}
-              disabled={isSigningOut}
-              className="w-full flex items-center space-x-3 p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 hover:bg-red-500/20 transition-all disabled:opacity-50"
-            >
-              {isSigningOut ? (
-                <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin" />
-              ) : (
-                <LogOut className="w-5 h-5" />
-              )}
-              <span>{isSigningOut ? 'Signing Out...' : 'Sign Out'}</span>
-            </motion.button>
-          </div>
         </motion.div>
       )}
 
