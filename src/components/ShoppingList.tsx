@@ -564,8 +564,6 @@ export const ShoppingListComponent: React.FC = () => {
           </motion.div>
         )}
       </AnimatePresence>
-        </div>
-      </div>
     </div>
   );
 };
