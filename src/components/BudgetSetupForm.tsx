@@ -93,6 +93,15 @@ export const BudgetSetupForm: React.FC<BudgetSetupFormProps> = ({ onNavigateToDa
       alert('Database not connected. Please click "Connect to Supabase" in the top right corner to set up your database connection.');
       return;
     }
+
+    // Additional check for environment variables
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+    
+    if (!supabaseUrl || !supabaseKey) {
+      alert('⚠️ Database Connection Required\n\nTo save your budget plan, you need to connect to Supabase:\n\n1. Click the "Connect to Supabase" button in the top right corner\n2. This will set up your database automatically\n3. Then you can create and save budget plans\n\nYour data will be securely stored and synced across all your devices.');
+      return;
+    }
     
     setIsLoading(true);
     try {
@@ -137,11 +146,11 @@ export const BudgetSetupForm: React.FC<BudgetSetupFormProps> = ({ onNavigateToDa
           onNavigateToDashboard();
         }, 2000);
       } else {
-        alert(`Failed to ${isEditing ? 'update' : 'create'} budget plan. Please try again.`);
+        alert(`❌ Failed to ${isEditing ? 'update' : 'create'} budget plan.\n\nThis usually means:\n1. Database connection is not set up\n2. Click "Connect to Supabase" in the top right\n3. Try again after connecting\n\nIf the problem persists, please check your internet connection.`);
       }
     } catch (error) {
       console.error(`Error ${isEditing ? 'updating' : 'creating'} budget plan:`, error);
-      alert('An error occurred. Please try again.');
+      alert(`❌ Database Error\n\nError: ${error instanceof Error ? error.message : 'Unknown error'}\n\nSolution:\n1. Click "Connect to Supabase" in the top right corner\n2. This will set up your database connection\n3. Try creating your budget plan again`);
     } finally {
       setIsLoading(false);
     }
@@ -197,6 +206,27 @@ export const BudgetSetupForm: React.FC<BudgetSetupFormProps> = ({ onNavigateToDa
 
       {/* Form Content */}
       <div className="bg-light-surface/50 dark:bg-dark-surface/50 backdrop-blur-sm border border-light-border dark:border-dark-border rounded-2xl p-4 md:p-8 shadow-glass transition-colors duration-300">
+        {/* Database Connection Warning */}
+        {(!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-6 p-4 bg-orange-500/10 border border-orange-500/20 rounded-xl"
+          >
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-orange-500/20 rounded-full flex items-center justify-center">
+                <span className="text-orange-400 font-bold">!</span>
+              </div>
+              <div>
+                <h4 className="font-semibold text-orange-400 mb-1">Database Connection Required</h4>
+                <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
+                  To save your budget plan, click <strong>"Connect to Supabase"</strong> in the top right corner to set up your database.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
         {currentStep === 1 && (
           <BudgetIncomeStep
             budgetName={budgetName}
