@@ -37,38 +37,73 @@ export const supabase = hasCredentials
   : createMockClient();
 
 export const getCurrentUser = async () => {
-  if (!hasCredentials) {
-    throw new Error('Supabase is not configured. Please check your environment variables.');
+  try {
+    if (!hasCredentials) {
+      console.warn('Supabase credentials not available');
+      return null;
+    }
+    const { data: { user }, error } = await supabase.auth.getUser();
+    if (error) {
+      console.error('Auth error:', error);
+      return null;
+    }
+    return user;
+  } catch (error) {
+    console.error('Failed to get current user:', error);
+    return null;
   }
-  const { data: { user } } = await supabase.auth.getUser();
-  return user;
 };
 
 export const signUpWithEmail = async (email: string, password: string) => {
-  if (!hasCredentials) {
-    throw new Error('Supabase is not configured. Please check your environment variables.');
+  try {
+    if (!hasCredentials) {
+      return { 
+        data: { user: null, session: null }, 
+        error: { message: 'Supabase is not configured. Please connect to Supabase first.' } 
+      };
+    }
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+    });
+    return { data, error };
+  } catch (error) {
+    return { 
+      data: { user: null, session: null }, 
+      error: { message: `Connection failed: ${error}` } 
+    };
   }
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password,
-  });
-  return { data, error };
 };
 
 export const signInWithEmail = async (email: string, password: string) => {
-  if (!hasCredentials) {
-    throw new Error('Supabase is not configured. Please check your environment variables.');
+  try {
+    if (!hasCredentials) {
+      return { 
+        data: { user: null, session: null }, 
+        error: { message: 'Supabase is not configured. Please connect to Supabase first.' } 
+      };
+    }
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+    return { data, error };
+  } catch (error) {
+    return { 
+      data: { user: null, session: null }, 
+      error: { message: `Connection failed: ${error}` } 
+    };
   }
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
-  return { data, error };
 };
 
 export const signOut = async () => {
-  if (!hasCredentials) {
-    throw new Error('Supabase is not configured. Please check your environment variables.');
+  try {
+    if (!hasCredentials) {
+      console.warn('Supabase not configured, cannot sign out');
+      return;
+    }
+    await supabase.auth.signOut();
+  } catch (error) {
+    console.error('Sign out failed:', error);
   }
-  await supabase.auth.signOut();
 };

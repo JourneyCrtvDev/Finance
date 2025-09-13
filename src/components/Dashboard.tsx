@@ -10,6 +10,7 @@ import { QuickActions } from './QuickActions';
 import { BudgetAnalytics } from './BudgetAnalytics';
 import { FinancialGoals } from './FinancialGoals';
 import { SmartNotifications } from './SmartNotifications';
+import { MobileQuickStats } from './MobileQuickStats';
 import { MobileExpenseTracker } from './MobileExpenseTracker';
 
 interface DashboardProps {
