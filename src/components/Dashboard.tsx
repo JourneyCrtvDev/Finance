@@ -12,6 +12,7 @@ import { FinancialGoals } from './FinancialGoals';
 import { SmartNotifications } from './SmartNotifications';
 
 interface DashboardProps {
+import { MobileExpenseTracker } from './MobileExpenseTracker';
   onNavigateBack: () => void;
   onEditBudget: (plan: BudgetPlan) => void;
   onSignOut: () => void;
@@ -250,19 +251,19 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigateBack, onEditBudg
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => currentPlan && onEditBudget(currentPlan)}
-            className="flex items-center space-x-2 bg-light-glass dark:bg-dark-glass border border-light-border dark:border-dark-border px-4 py-2 rounded-xl text-light-text dark:text-dark-text hover:border-lime-accent/30 transition-all"
+            className="flex items-center space-x-2 bg-light-glass dark:bg-dark-glass border border-light-border dark:border-dark-border px-3 py-2 rounded-xl text-light-text dark:text-dark-text hover:border-lime-accent/30 transition-all"
           >
             <Edit3 className="w-4 h-4" />
-            <span>Edit Budget</span>
+            <span className="hidden sm:inline">Edit Budget</span>
           </motion.button>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={onNavigateBack}
-            className="flex items-center space-x-2 bg-lime-accent text-light-base dark:text-dark-base px-4 py-2 rounded-xl font-medium hover:shadow-glow transition-all"
+            className="flex items-center space-x-2 bg-lime-accent text-light-base dark:text-dark-base px-3 py-2 rounded-xl font-medium hover:shadow-glow transition-all"
           >
             <Plus className="w-4 h-4" />
-            <span>New Budget</span>
+            <span className="hidden sm:inline">New Budget</span>
           </motion.button>
         </div>
       </motion.div>
@@ -324,6 +325,9 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigateBack, onEditBudg
           >
             {/* Quick Actions */}
             <QuickActions onAction={onSectionChange} />
+
+            {/* Mobile Quick Stats */}
+            <MobileQuickStats currentPlan={currentPlan} summary={summary} />
 
             {/* Smart Notifications */}
             <SmartNotifications currentUserId={currentUserId} onNavigateToSection={onSectionChange} />

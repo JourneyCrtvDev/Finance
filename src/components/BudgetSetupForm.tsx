@@ -385,7 +385,7 @@ export const BudgetSetupForm: React.FC<BudgetSetupFormProps> = ({ onNavigateToDa
               disabled={isLoading}
               className="bg-lime-accent text-light-base dark:text-dark-base px-6 py-3 rounded-xl font-medium hover:shadow-glow transition-all disabled:opacity-50 flex-1 sm:flex-none order-1 sm:order-2"
             >
-              {isLoading ? (isEditing ? 'Updating...' : 'Creating...') : (isEditing ? 'Update Budget' : 'Create Budget')}
+              {isLoading ? (currentPlan ? 'Updating...' : 'Creating...') : (currentPlan ? 'Update Budget' : 'Create Budget')}
             </motion.button>
           )}
         </div>

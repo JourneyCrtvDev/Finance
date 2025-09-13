@@ -66,7 +66,7 @@ export const TopBar: React.FC<TopBarProps> = ({ onSignOut }) => {
           </div>
 
           {/* Notifications */}
-          <div className="relative hidden sm:block">
+          <div className="relative">
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}

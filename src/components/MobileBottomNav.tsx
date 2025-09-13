@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Calculator, TrendingUp, BarChart3, Settings, Palette, CreditCard, PieChart, MoreHorizontal } from 'lucide-react';
+import { ShoppingBag } from 'lucide-react';
 import { THEME_COLORS, applyThemeColor } from '../constants/colors';
 
 interface MobileBottomNavProps {
@@ -11,7 +12,7 @@ interface MobileBottomNavProps {
 const navigation = [
   { id: 'budget', label: 'Budget', icon: Calculator },
   { id: 'dashboard', label: 'Dashboard', icon: BarChart3 },
-  { id: 'insights', label: 'Insights', icon: PieChart },
+  { id: 'payments', label: 'Payments', icon: CreditCard },
   { id: 'more', label: 'More', icon: MoreHorizontal },
 ];
 
@@ -114,7 +115,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeSection,
                     setShowMoreMenu(false);
                     setShowColorPicker(true);
                   }}
-                  className="flex flex-col items-center space-y-3 p-4 rounded-xl border-2 border-light-border dark:border-dark-border bg-light-glass dark:bg-dark-glass text-light-text dark:text-dark-text hover:border-lime-accent/30 transition-all"
+                  className="w-full flex items-center justify-center space-x-3 p-4 rounded-xl border-2 border-light-border dark:border-dark-border bg-light-glass dark:bg-dark-glass text-light-text dark:text-dark-text hover:border-lime-accent/30 transition-all"
                 >
                   <div className="relative">
                     <Palette className="w-6 h-6" />
@@ -123,7 +124,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeSection,
                       style={{ backgroundColor: selectedColor.value }}
                     />
                   </div>
-                  <span className="font-medium">Theme</span>
+                  <span className="font-medium">Change Theme Color</span>
                 </motion.button>
               </div>
             </motion.div>
@@ -147,36 +148,13 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeSection,
               exit={{ y: 100, opacity: 0 }}
               className="bg-light-surface dark:bg-dark-surface rounded-t-2xl p-6 w-full max-w-md mx-4 mb-20"
               onClick={(e) => e.stopPropagation()}
-            >
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-bold text-light-text dark:text-dark-text">Choose Theme Color</h3>
-                <button
-                  onClick={() => setShowColorPicker(false)}
-                  className="text-light-text-secondary dark:text-dark-text-secondary text-xl"
-                >
-                  ✕
-                </button>
+                    <item.icon className="w-6 h-6" />
+                    <span className="font-medium">{item.label}</span>
+                  </motion.button>
+                ))}
               </div>
               
-              <div className="grid grid-cols-3 gap-4">
-                {THEME_COLORS.map((color) => (
-                  <motion.button
-                    key={color.name}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => handleColorChange(color)}
-                    className={`flex flex-col items-center space-y-2 p-4 rounded-xl border-2 transition-all ${
-                      selectedColor.value === color.value
-                        ? 'border-current'
-                        : 'border-light-border dark:border-dark-border'
-                    }`}
-                    style={{ color: color.value }}
-                  >
-                    <div className={`w-8 h-8 rounded-full ${color.class}`} />
-                    <span className="text-sm font-medium text-light-text dark:text-dark-text">
-                      {color.name}
-                    </span>
-                  </motion.button>
+              <div className="mt-4">
                 ))}
               </div>
             </motion.div>
@@ -196,7 +174,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeSection,
               key={item.id}
               onClick={() => item.id === 'more' ? handleMoreClick() : onSectionChange(item.id)}
               className={`flex flex-col items-center space-y-1 p-2 rounded-xl transition-all relative min-w-0 flex-1 ${
-                activeSection === item.id || (item.id === 'more' && ['payments', 'exchange', 'settings'].includes(activeSection))
+                activeSection === item.id || (item.id === 'more' && ['insights', 'exchange', 'shopping', 'settings'].includes(activeSection))
                   ? 'text-lime-accent'
                   : 'text-light-text-secondary dark:text-dark-text-secondary'
               }`}
@@ -205,7 +183,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeSection,
             >
               <div className="relative">
                 <item.icon className="w-5 h-5" />
-                {(activeSection === item.id || (item.id === 'more' && ['payments', 'exchange', 'settings'].includes(activeSection))) && (
+                {(activeSection === item.id || (item.id === 'more' && ['insights', 'exchange', 'shopping', 'settings'].includes(activeSection))) && (
                   <motion.div
                     layoutId="activeIndicatorMobile"
                     className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-lime-accent rounded-full"
