@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Settings } from 'lucide-react';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { Sidebar } from './components/Sidebar';
 import { TopBar } from './components/TopBar';
@@ -198,6 +199,18 @@ const AppContent: React.FC<{
         {/* Mobile Bottom Navigation */}
         <div className="md:hidden">
           <MobileBottomNav activeSection={activeSection} onSectionChange={setActiveSection} />
+        </div>
+        
+        {/* Mobile Floating Action Button for More Options */}
+        <div className="md:hidden fixed bottom-20 right-4 z-30">
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => setActiveSection(activeSection === 'settings' ? 'dashboard' : 'settings')}
+            className="w-12 h-12 bg-lime-accent text-light-base dark:text-dark-base rounded-full shadow-glow flex items-center justify-center"
+          >
+            <Settings className="w-6 h-6" />
+          </motion.button>
         </div>
       </div>
       

@@ -11,8 +11,8 @@ interface MobileBottomNavProps {
 const navigation = [
   { id: 'budget', label: 'Budget', icon: Calculator },
   { id: 'dashboard', label: 'Dashboard', icon: BarChart3 },
+  { id: 'payments', label: 'Payments', icon: CreditCard },
   { id: 'insights', label: 'Insights', icon: PieChart },
-  { id: 'more', label: 'More', icon: MoreHorizontal },
 ];
 
 export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeSection, onSectionChange }) => {
@@ -39,7 +39,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeSection,
     <>
       {/* More Menu Modal */}
       <AnimatePresence>
-        {showMoreMenu && (
+        {false && showMoreMenu && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -65,20 +65,6 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeSection,
               </div>
               
               <div className="grid grid-cols-2 gap-4">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => handleMoreItemClick('payments')}
-                  className={`flex flex-col items-center space-y-3 p-4 rounded-xl border-2 transition-all ${
-                    activeSection === 'payments'
-                      ? 'border-lime-accent bg-lime-accent/10 text-lime-accent'
-                      : 'border-light-border dark:border-dark-border bg-light-glass dark:bg-dark-glass text-light-text dark:text-dark-text hover:border-lime-accent/30'
-                  }`}
-                >
-                  <CreditCard className="w-6 h-6" />
-                  <span className="font-medium">Payments</span>
-                </motion.button>
-
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -136,9 +122,9 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeSection,
           {navigation.map((item) => (
             <motion.button
               key={item.id}
-              onClick={() => item.id === 'more' ? handleMoreClick() : onSectionChange(item.id)}
+              onClick={() => onSectionChange(item.id)}
               className={`flex flex-col items-center space-y-1 p-2 rounded-xl transition-all relative min-w-0 flex-1 ${
-                activeSection === item.id || (item.id === 'more' && ['payments', 'exchange', 'settings', 'shopping'].includes(activeSection))
+                activeSection === item.id
                   ? 'text-lime-accent'
                   : 'text-light-text-secondary dark:text-dark-text-secondary'
               }`}
@@ -147,7 +133,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeSection,
             >
               <div className="relative">
                 <item.icon className="w-5 h-5" />
-                {(activeSection === item.id || (item.id === 'more' && ['payments', 'exchange', 'settings', 'shopping'].includes(activeSection))) && (
+                {activeSection === item.id && (
                   <motion.div
                     layoutId="activeIndicatorMobile"
                     className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-lime-accent rounded-full"
