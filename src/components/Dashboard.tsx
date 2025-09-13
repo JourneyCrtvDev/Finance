@@ -239,26 +239,29 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigateBack, onEditBudg
         {/* Financial Goals - Always Show */}
         <FinancialGoals currentUserId={currentUserId} />
 
-        {/* No Budget Plans Message */}
-        <div className="flex items-center justify-center h-96">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="text-center"
+        {/* Getting Started Message */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          className="bg-light-surface/50 dark:bg-dark-surface/50 backdrop-blur-sm border border-light-border dark:border-dark-border rounded-2xl p-8 shadow-glass text-center"
+        >
+          <PiggyBank className="w-16 h-16 text-lime-accent mx-auto mb-4" />
+          <h3 className="text-2xl font-bold text-light-text dark:text-dark-text font-editorial mb-2">
+            Ready to Start Budgeting?
+          </h3>
+          <p className="text-light-text-secondary dark:text-dark-text-secondary mb-6">
+            Create your first budget plan to unlock personalized insights and track your financial progress
+          </p>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={onNavigateBack}
+            className="bg-lime-accent text-light-base dark:text-dark-base px-6 py-3 rounded-xl font-medium hover:shadow-glow transition-all"
           >
-            <PiggyBank className="w-16 h-16 text-light-text-secondary dark:text-dark-text-secondary mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-light-text dark:text-dark-text font-editorial mb-4">No Budget Plans Found</h2>
-            <p className="text-light-text-secondary dark:text-dark-text-secondary mb-6">Create your first budget plan to get started</p>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={onNavigateBack}
-              className="bg-lime-accent text-light-base dark:text-dark-base px-6 py-3 rounded-xl font-medium hover:shadow-glow transition-all"
-            >
-              Create Budget Plan
-            </motion.button>
-          </motion.div>
-        </div>
+            Create Your First Budget
+          </motion.button>
+        </motion.div>
       </div>
     );
   }

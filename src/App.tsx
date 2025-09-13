@@ -202,16 +202,6 @@ const AppContent: React.FC<{
         </div>
         
         {/* Mobile Floating Action Button for More Options */}
-        <div className="md:hidden fixed bottom-20 right-4 z-30">
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            onClick={() => setActiveSection(activeSection === 'settings' ? 'dashboard' : 'settings')}
-            className="w-12 h-12 bg-lime-accent text-light-base dark:text-dark-base rounded-full shadow-glow flex items-center justify-center"
-          >
-            <SettingsIcon className="w-6 h-6" />
-          </motion.button>
-        </div>
       </div>
       
       {/* PWA Install Prompt */}

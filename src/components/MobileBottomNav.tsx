@@ -12,7 +12,7 @@ const navigation = [
   { id: 'budget', label: 'Budget', icon: Calculator },
   { id: 'dashboard', label: 'Dashboard', icon: BarChart3 },
   { id: 'payments', label: 'Payments', icon: CreditCard },
-  { id: 'insights', label: 'Insights', icon: PieChart },
+  { id: 'exchange', label: 'Exchange', icon: TrendingUp },
 ];
 
 export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeSection, onSectionChange }) => {
@@ -118,12 +118,12 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeSection,
         animate={{ y: 0 }}
         className="fixed bottom-0 left-0 right-0 bg-light-surface dark:bg-dark-surface backdrop-blur-glass border-t border-light-border dark:border-dark-border z-40"
       >
-        <div className="flex items-center justify-around px-2 py-2 pb-safe">
+        <div className="flex items-center justify-around px-1 py-2 pb-safe">
           {navigation.map((item) => (
             <motion.button
               key={item.id}
               onClick={() => onSectionChange(item.id)}
-              className={`flex flex-col items-center space-y-1 p-2 rounded-xl transition-all relative min-w-0 flex-1 ${
+              className={`flex flex-col items-center space-y-1 p-1 rounded-lg transition-all relative min-w-0 flex-1 ${
                 activeSection === item.id
                   ? 'text-lime-accent'
                   : 'text-light-text-secondary dark:text-dark-text-secondary'
@@ -146,7 +146,83 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeSection,
               <span className="text-xs font-medium truncate">{item.label}</span>
             </motion.button>
           ))}
+          
+          {/* More Button */}
+          <motion.button
+            onClick={() => setShowMoreMenu(!showMoreMenu)}
+            className="flex flex-col items-center space-y-1 p-1 rounded-lg transition-all relative min-w-0 flex-1 text-light-text-secondary dark:text-dark-text-secondary"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <MoreHorizontal className="w-5 h-5" />
+            <span className="text-xs font-medium">More</span>
+          </motion.button>
         </div>
+        
+        {/* More Menu */}
+        <AnimatePresence>
+          {showMoreMenu && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              className="absolute bottom-full left-0 right-0 bg-light-surface dark:bg-dark-surface border-t border-light-border dark:border-dark-border p-4"
+            >
+              <div className="grid grid-cols-3 gap-3">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => {
+                    onSectionChange('insights');
+                    setShowMoreMenu(false);
+                  }}
+                  className={`flex flex-col items-center space-y-2 p-3 rounded-lg transition-all ${
+                    activeSection === 'insights'
+                      ? 'bg-lime-accent/10 text-lime-accent'
+                      : 'bg-light-glass dark:bg-dark-glass text-light-text dark:text-dark-text'
+                  }`}
+                >
+                  <PieChart className="w-5 h-5" />
+                  <span className="text-xs font-medium">Insights</span>
+                </motion.button>
+                
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => {
+                    onSectionChange('shopping');
+                    setShowMoreMenu(false);
+                  }}
+                  className={`flex flex-col items-center space-y-2 p-3 rounded-lg transition-all ${
+                    activeSection === 'shopping'
+                      ? 'bg-lime-accent/10 text-lime-accent'
+                      : 'bg-light-glass dark:bg-dark-glass text-light-text dark:text-dark-text'
+                  }`}
+                >
+                  <ShoppingBag className="w-5 h-5" />
+                  <span className="text-xs font-medium">Shopping</span>
+                </motion.button>
+                
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => {
+                    onSectionChange('settings');
+                    setShowMoreMenu(false);
+                  }}
+                  className={`flex flex-col items-center space-y-2 p-3 rounded-lg transition-all ${
+                    activeSection === 'settings'
+                      ? 'bg-lime-accent/10 text-lime-accent'
+                      : 'bg-light-glass dark:bg-dark-glass text-light-text dark:text-dark-text'
+                  }`}
+                >
+                  <SettingsIcon className="w-5 h-5" />
+                  <span className="text-xs font-medium">Settings</span>
+                </motion.button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.div>
     </>
   );
