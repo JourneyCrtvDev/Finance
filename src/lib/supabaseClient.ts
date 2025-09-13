@@ -39,17 +39,20 @@ export const supabase = hasCredentials
 export const getCurrentUser = async () => {
   try {
     if (!hasCredentials) {
-      console.warn('Supabase credentials not available');
+      // Silently return null when credentials aren't available
       return null;
     }
     const { data: { user }, error } = await supabase.auth.getUser();
     if (error) {
-      console.error('Auth error:', error);
+      // Only log actual auth errors, not missing credentials
+      if (error.message !== 'Invalid JWT') {
+        console.error('Auth error:', error);
+      }
       return null;
     }
     return user;
   } catch (error) {
-    console.error('Failed to get current user:', error);
+    // Silently handle network errors to prevent console spam
     return null;
   }
 };

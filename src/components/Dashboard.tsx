@@ -168,7 +168,34 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigateBack, onEditBudg
 
   if (!currentPlan || !summary) {
     return (
-      <div className="flex items-center justify-center h-96">
+      <div className="space-y-6">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="flex flex-col sm:flex-row sm:items-center justify-between space-y-4 sm:space-y-0"
+        >
+          <div>
+            <div className="flex items-center space-x-3 mb-2">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={onNavigateBack}
+                className="p-2 bg-light-glass dark:bg-dark-glass rounded-full hover:bg-lime-accent/10 transition-colors"
+              >
+                <ArrowLeft className="w-5 h-5 text-light-text dark:text-dark-text" />
+              </motion.button>
+              <h2 className="text-3xl font-bold text-light-text dark:text-dark-text font-editorial">Budget Dashboard</h2>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Quick Actions - Always Show */}
+        <QuickActions onAction={onSectionChange} />
+
+        {/* No Budget Plans Message */}
+        <div className="flex items-center justify-center h-96">
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -186,6 +213,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigateBack, onEditBudg
             Create Budget Plan
           </motion.button>
         </motion.div>
+        </div>
       </div>
     );
   }
@@ -328,7 +356,9 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigateBack, onEditBudg
             <QuickActions onAction={onSectionChange} />
 
             {/* Mobile Quick Stats */}
-            <MobileQuickStats currentPlan={currentPlan} summary={summary} />
+            {currentPlan && summary && (
+              <MobileQuickStats currentPlan={currentPlan} summary={summary} />
+            )}
 
             {/* Mobile Expense Tracker */}
             {currentPlan && (

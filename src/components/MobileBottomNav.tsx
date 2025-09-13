@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calculator, TrendingUp, BarChart3, Settings, Palette, CreditCard, PieChart, MoreHorizontal } from 'lucide-react';
+import { Calculator, TrendingUp, BarChart3, Settings, Palette, CreditCard, PieChart, MoreHorizontal, ShoppingBag } from 'lucide-react';
 import { THEME_COLORS, applyThemeColor } from '../constants/colors';
 
 interface MobileBottomNavProps {
@@ -11,7 +11,7 @@ interface MobileBottomNavProps {
 const navigation = [
   { id: 'budget', label: 'Budget', icon: Calculator },
   { id: 'dashboard', label: 'Dashboard', icon: BarChart3 },
-  { id: 'payments', label: 'Payments', icon: CreditCard },
+  { id: 'insights', label: 'Insights', icon: PieChart },
   { id: 'more', label: 'More', icon: MoreHorizontal },
 ];
 
@@ -82,10 +82,24 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeSection,
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
+                  onClick={() => handleMoreItemClick('shopping')}
+                  className={`flex flex-col items-center space-y-3 p-4 rounded-xl border-2 transition-all ${
+                    activeSection === 'shopping'
+                      ? 'border-lime-accent bg-lime-accent/10 text-lime-accent'
+                      : 'border-light-border dark:border-dark-border bg-light-glass dark:bg-dark-glass text-light-text dark:text-dark-text hover:border-lime-accent/30'
+                  }`}
+                >
+                  <ShoppingBag className="w-6 h-6" />
+                  <span className="font-medium">Shopping</span>
+                </motion.button>
+
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={() => handleMoreItemClick('exchange')}
                   className={`flex flex-col items-center space-y-3 p-4 rounded-xl border-2 transition-all ${
                     activeSection === 'exchange'
-                      ? 'border-lime-accent bg-lime-accent/10 text-lime-accent'
+                    activeSection === item.id || (item.id === 'more' && ['payments', 'exchange', 'settings', 'shopping'].includes(activeSection))
                       : 'border-light-border dark:border-dark-border bg-light-glass dark:bg-dark-glass text-light-text dark:text-dark-text hover:border-lime-accent/30'
                   }`}
                 >
@@ -94,7 +108,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeSection,
                 </motion.button>
 
                 <motion.button
-                  whileHover={{ scale: 1.05 }}
+                    {(activeSection === item.id || (item.id === 'more' && ['payments', 'exchange', 'settings', 'shopping'].includes(activeSection))) && (
                   whileTap={{ scale: 0.95 }}
                   onClick={() => handleMoreItemClick('settings')}
                   className={`flex flex-col items-center space-y-3 p-4 rounded-xl border-2 transition-all ${
@@ -106,79 +120,6 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeSection,
                   <Settings className="w-6 h-6" />
                   <span className="font-medium">Settings</span>
                 </motion.button>
-
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => {
-                    setShowMoreMenu(false);
-                    setShowColorPicker(true);
-                  }}
-                  className="w-full flex items-center justify-center space-x-3 p-4 rounded-xl border-2 border-light-border dark:border-dark-border bg-light-glass dark:bg-dark-glass text-light-text dark:text-dark-text hover:border-lime-accent/30 transition-all"
-                >
-                  <div className="relative">
-                    <Palette className="w-6 h-6" />
-                    <div 
-                      className="absolute -bottom-1 -right-1 w-3 h-3 rounded-full border-2 border-light-surface dark:border-dark-surface"
-                      style={{ backgroundColor: selectedColor.value }}
-                    />
-                  </div>
-                  <span className="font-medium">Change Theme Color</span>
-                </motion.button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Color Picker Modal */}
-      <AnimatePresence>
-        {showColorPicker && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 z-50 flex items-end justify-center"
-            onClick={() => setShowColorPicker(false)}
-          >
-            <motion.div
-              initial={{ y: 100, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: 100, opacity: 0 }}
-              className="bg-light-surface dark:bg-dark-surface rounded-t-2xl p-6 w-full max-w-md mx-4 mb-20"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-bold text-light-text dark:text-dark-text">Choose Theme Color</h3>
-                <button
-                  onClick={() => setShowColorPicker(false)}
-                  className="text-light-text-secondary dark:text-dark-text-secondary text-xl"
-                >
-                  ✕
-                </button>
-              </div>
-              
-              <div className="grid grid-cols-4 gap-3">
-                {THEME_COLORS.map((color) => (
-                  <motion.button
-                    key={color.name}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    onClick={() => handleColorChange(color)}
-                    className={`w-12 h-12 rounded-full border-4 transition-all ${
-                      selectedColor.name === color.name
-                        ? 'border-light-text dark:border-dark-text'
-                        : 'border-light-border dark:border-dark-border'
-                    }`}
-                    style={{ backgroundColor: color.value }}
-                  >
-                    <item.icon className="w-6 h-6" />
-                    <span className="font-medium">{item.label}</span>
-                  </motion.button>
-                ))}
-              </div>
-              
-              <div className="mt-4">
               </div>
             </motion.div>
           </motion.div>
