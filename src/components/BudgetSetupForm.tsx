@@ -7,6 +7,7 @@ import { BudgetPlan, IncomeItem, ExpenseItem, AllocationTarget } from '../types/
 import { BudgetIncomeStep } from './budget/BudgetIncomeStep';
 import { BudgetExpenseStep } from './budget/BudgetExpenseStep';
 import { BudgetAllocationStep } from './budget/BudgetAllocationStep';
+import { SupabaseConnectionTest } from './SupabaseConnectionTest';
 import { supabase } from '../lib/supabaseClient';
 
 interface BudgetSetupFormProps {
@@ -31,6 +32,8 @@ export const BudgetSetupForm: React.FC<BudgetSetupFormProps> = ({ onNavigateToDa
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [hasLoadedPreviousExpenses, setHasLoadedPreviousExpenses] = useState(false);
   const [isLoadingPrevious, setIsLoadingPrevious] = useState(false);
+
+  const [showConnectionTest, setShowConnectionTest] = useState(false);
 
   const isEditing = !!editingPlan;
 
@@ -146,11 +149,13 @@ export const BudgetSetupForm: React.FC<BudgetSetupFormProps> = ({ onNavigateToDa
           onNavigateToDashboard();
         }, 2000);
       } else {
-        alert(`❌ Failed to ${isEditing ? 'update' : 'create'} budget plan.\n\nThis usually means:\n1. Database connection is not set up\n2. Click "Connect to Supabase" in the top right\n3. Try again after connecting\n\nIf the problem persists, please check your internet connection.`);
+        // Show connection test instead of generic error
+        setShowConnectionTest(true);
       }
     } catch (error) {
       console.error(`Error ${isEditing ? 'updating' : 'creating'} budget plan:`, error);
-      alert(`❌ Database Error\n\nError: ${error instanceof Error ? error.message : 'Unknown error'}\n\nSolution:\n1. Click "Connect to Supabase" in the top right corner\n2. This will set up your database connection\n3. Try creating your budget plan again`);
+      // Show connection test for any database errors
+      setShowConnectionTest(true);
     } finally {
       setIsLoading(false);
     }
@@ -183,6 +188,46 @@ export const BudgetSetupForm: React.FC<BudgetSetupFormProps> = ({ onNavigateToDa
           {isEditing ? 'Update your budget plan details' : 'Set up your monthly budget in 3 easy steps'}
         </p>
       </motion.div>
+
+      {/* Connection Test Modal */}
+      {showConnectionTest && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+          onClick={() => setShowConnectionTest(false)}
+        >
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="bg-light-surface dark:bg-dark-surface rounded-2xl p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xl font-bold text-light-text dark:text-dark-text">
+                Database Connection Diagnostics
+              </h3>
+              <button
+                onClick={() => setShowConnectionTest(false)}
+                className="text-light-text-secondary dark:text-dark-text-secondary hover:text-light-text dark:hover:text-dark-text text-xl"
+              >
+                ✕
+              </button>
+            </div>
+            <SupabaseConnectionTest />
+            <div className="mt-6 flex justify-end">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setShowConnectionTest(false)}
+                className="bg-lime-accent text-light-base dark:text-dark-base px-4 py-2 rounded-lg font-medium hover:shadow-glow transition-all"
+              >
+                Close
+              </motion.button>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
 
       {/* Progress Steps */}
       <div className="flex items-center justify-center space-x-1 md:space-x-4 mb-6 md:mb-8 px-4">
