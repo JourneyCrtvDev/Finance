@@ -31,6 +31,8 @@ export const ShoppingListComponent: React.FC = () => {
   const [userId, setUserId] = useState<string | null>(null);
   const [error, setError] = useState('');
   const [showCreateForm, setShowCreateForm] = useState(false);
+  const [showReuseForm, setShowReuseForm] = useState(false);
+  const [reuseListName, setReuseListName] = useState('');
 
   useEffect(() => {
     getCurrentUser().then(user => {
@@ -130,14 +132,22 @@ export const ShoppingListComponent: React.FC = () => {
     }
   };
 
+  const handleShowReuseForm = () => {
+    if (!activeList) return;
+    setReuseListName(activeList.name);
+    setShowReuseForm(true);
+  };
+
   const handleReuseList = async () => {
-    if (!userId || !activeList) return;
+    if (!userId || !activeList || !reuseListName.trim()) return;
     setIsLoading(true);
     try {
-      const reused = await ShoppingListService.reuseList(userId, activeList);
+      const reused = await ShoppingListService.reuseList(userId, activeList, reuseListName.trim());
       if (reused) {
         setLists([reused, ...lists]);
         setActiveList(reused);
+        setShowReuseForm(false);
+        setReuseListName('');
       }
     } catch (e: any) {
       setError(e.message);
@@ -325,7 +335,7 @@ export const ShoppingListComponent: React.FC = () => {
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    onClick={handleReuseList}
+                    onClick={handleShowReuseForm}
                     disabled={isLoading}
                     className="flex items-center space-x-2 px-3 py-2 bg-light-glass dark:bg-dark-glass border border-light-border dark:border-dark-border rounded-lg text-light-text dark:text-dark-text hover:border-lime-accent/30 transition-all text-sm"
                   >
@@ -496,6 +506,64 @@ export const ShoppingListComponent: React.FC = () => {
               </motion.button>
             </motion.div>
           )}
+        </div>
+      </div>
+
+      {/* Reuse List Form Modal */}
+      <AnimatePresence>
+        {showReuseForm && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+            onClick={() => setShowReuseForm(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-light-surface dark:bg-dark-surface border border-light-border dark:border-dark-border rounded-2xl p-6 max-w-md w-full shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h3 className="text-xl font-bold text-light-text dark:text-dark-text font-editorial mb-4">
+                Duplicate Shopping List
+              </h3>
+              <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary mb-4">
+                Give your duplicated list a new name:
+              </p>
+              <input
+                type="text"
+                value={reuseListName}
+                onChange={(e) => setReuseListName(e.target.value)}
+                placeholder="Enter new list name..."
+                className="w-full bg-light-glass dark:bg-dark-glass border border-light-border dark:border-dark-border rounded-lg px-4 py-3 text-light-text dark:text-dark-text focus:outline-none focus:border-lime-accent/50 transition-colors duration-300 mb-6"
+                autoFocus
+                onKeyPress={(e) => e.key === 'Enter' && handleReuseList()}
+              />
+              <div className="flex gap-3">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setShowReuseForm(false)}
+                  className="flex-1 px-4 py-2 bg-light-glass dark:bg-dark-glass border border-light-border dark:border-dark-border rounded-lg text-light-text dark:text-dark-text hover:border-red-400/30 transition-all"
+                >
+                  Cancel
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={handleReuseList}
+                  disabled={isLoading || !reuseListName.trim()}
+                  className="flex-1 bg-lime-accent text-light-base dark:text-dark-base px-4 py-2 rounded-lg font-medium hover:shadow-glow transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isLoading ? 'Creating...' : 'Duplicate'}
+                </motion.button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
         </div>
       </div>
     </div>

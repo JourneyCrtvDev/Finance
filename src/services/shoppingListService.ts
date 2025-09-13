@@ -53,7 +53,7 @@ export class ShoppingListService {
     if (error) throw error;
   }
 
-  static async reuseList(userId: string, list: ShoppingList): Promise<ShoppingList | null> {
+  static async reuseList(userId: string, list: ShoppingList, newName?: string): Promise<ShoppingList | null> {
     if (!supabase) {
       throw new Error('Database connection not available. Please check your configuration.');
     }
@@ -62,7 +62,7 @@ export class ShoppingListService {
       .from('shopping_lists')
       .insert([{
         user_id: userId,
-        name: list.name + ' (Copy)',
+        name: newName || (list.name + ' (Copy)'),
         items: list.items.map(item => ({ ...item, checked: false })),
       }])
       .select()
