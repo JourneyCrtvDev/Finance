@@ -127,7 +127,7 @@ function App() {
       case 'insights':
         return <Insights currentUserId={currentUserId} />;
       case 'settings':
-        return <Settings />;
+        return <Settings onSignOut={handleSignOut} />;
       case 'shopping':
         return <ShoppingListComponent />;
       default:

@@ -21,7 +21,11 @@ import { ColorPicker } from './ColorPicker';
 import { supabase, getCurrentUser } from '../lib/supabaseClient';
 import { DataExportService } from '../services/dataExportService';
 
-export const Settings: React.FC = () => {
+interface SettingsProps {
+  onSignOut: () => void;
+}
+
+export const Settings: React.FC<SettingsProps> = ({ onSignOut }) => {
   const [notifications, setNotifications] = useState({
     paymentReminders: true,
     budgetAlerts: true,
@@ -49,6 +53,7 @@ export const Settings: React.FC = () => {
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [isExporting, setIsExporting] = useState(false);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [isSigningOut, setIsSigningOut] = useState(false);
 
   // Load profile from Supabase on mount
   useEffect(() => {
@@ -153,6 +158,14 @@ export const Settings: React.FC = () => {
     } finally {
       setIsExporting(false);
     }
+  };
+
+  const handleSignOut = async () => {
+    setIsSigningOut(true);
+    setTimeout(() => {
+      setIsSigningOut(false);
+      onSignOut();
+    }, 500);
   };
 
   const deleteAccount = () => {
@@ -424,6 +437,26 @@ export const Settings: React.FC = () => {
         </div>
 
         <div className="space-y-4">
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={handleSignOut}
+            disabled={isSigningOut}
+            className="w-full flex items-center justify-center space-x-2 bg-red-500/10 border border-red-500/20 px-4 py-3 rounded-lg text-red-400 hover:bg-red-500/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isSigningOut ? (
+              <>
+                <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                <span>Signing Out...</span>
+              </>
+            ) : (
+              <>
+                <LogOut className="w-4 h-4" />
+                <span>Sign Out</span>
+              </>
+            )}
+          </motion.button>
+
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
