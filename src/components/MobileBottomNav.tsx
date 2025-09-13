@@ -120,7 +120,21 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeSection,
         <div className="flex items-center justify-around px-1 py-2 pb-safe">
           {navigation.map((item) => (
             <motion.button
-                <item.icon className="w-5 h-5" />
+              key={item.id}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={item.id === 'more' ? handleMoreClick : () => onSectionChange(item.id)}
+              className={`flex flex-col items-center space-y-1 p-2 rounded-lg transition-all ${
+                activeSection === item.id || (item.id === 'more' && showMoreMenu)
+                  ? 'text-lime-accent'
+                  : 'text-light-text-secondary dark:text-dark-text-secondary hover:text-lime-accent'
+              }`}
+            >
+              <item.icon className="w-5 h-5" />
+              <span className="text-xs font-medium">{item.label}</span>
+            </motion.button>
+          ))}
+        </div>
       </motion.div>
     </>
   );
