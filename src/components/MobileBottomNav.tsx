@@ -99,7 +99,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeSection,
                   onClick={() => handleMoreItemClick('exchange')}
                   className={`flex flex-col items-center space-y-3 p-4 rounded-xl border-2 transition-all ${
                     activeSection === 'exchange'
-                    activeSection === item.id || (item.id === 'more' && ['payments', 'exchange', 'settings', 'shopping'].includes(activeSection))
+                      ? 'border-lime-accent bg-lime-accent/10 text-lime-accent'
                       : 'border-light-border dark:border-dark-border bg-light-glass dark:bg-dark-glass text-light-text dark:text-dark-text hover:border-lime-accent/30'
                   }`}
                 >
@@ -108,7 +108,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeSection,
                 </motion.button>
 
                 <motion.button
-                    {(activeSection === item.id || (item.id === 'more' && ['payments', 'exchange', 'settings', 'shopping'].includes(activeSection))) && (
+                  whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => handleMoreItemClick('settings')}
                   className={`flex flex-col items-center space-y-3 p-4 rounded-xl border-2 transition-all ${
@@ -138,7 +138,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeSection,
               key={item.id}
               onClick={() => item.id === 'more' ? handleMoreClick() : onSectionChange(item.id)}
               className={`flex flex-col items-center space-y-1 p-2 rounded-xl transition-all relative min-w-0 flex-1 ${
-                activeSection === item.id || (item.id === 'more' && ['payments', 'exchange', 'settings'].includes(activeSection))
+                activeSection === item.id || (item.id === 'more' && ['payments', 'exchange', 'settings', 'shopping'].includes(activeSection))
                   ? 'text-lime-accent'
                   : 'text-light-text-secondary dark:text-dark-text-secondary'
               }`}
@@ -147,7 +147,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeSection,
             >
               <div className="relative">
                 <item.icon className="w-5 h-5" />
-                {(activeSection === item.id || (item.id === 'more' && ['payments', 'exchange', 'settings'].includes(activeSection))) && (
+                {(activeSection === item.id || (item.id === 'more' && ['payments', 'exchange', 'settings', 'shopping'].includes(activeSection))) && (
                   <motion.div
                     layoutId="activeIndicatorMobile"
                     className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-lime-accent rounded-full"
