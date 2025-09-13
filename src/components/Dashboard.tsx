@@ -10,9 +10,9 @@ import { QuickActions } from './QuickActions';
 import { BudgetAnalytics } from './BudgetAnalytics';
 import { FinancialGoals } from './FinancialGoals';
 import { SmartNotifications } from './SmartNotifications';
+import { MobileExpenseTracker } from './MobileExpenseTracker';
 
 interface DashboardProps {
-import { MobileExpenseTracker } from './MobileExpenseTracker';
   onNavigateBack: () => void;
   onEditBudget: (plan: BudgetPlan) => void;
   onSignOut: () => void;
@@ -328,6 +328,34 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigateBack, onEditBudg
 
             {/* Mobile Quick Stats */}
             <MobileQuickStats currentPlan={currentPlan} summary={summary} />
+
+            {/* Mobile Expense Tracker */}
+            {currentPlan && (
+              <MobileExpenseTracker 
+                currentPlan={currentPlan}
+                onUpdateExpense={async (expenseId: string, actualAmount: number) => {
+                  const updatedExpenseItems = currentPlan.expense_items.map(item =>
+                    item.id === expenseId 
+                      ? { ...item, actual: actualAmount }
+                      : item
+                  );
+
+                  const updatedPlan: BudgetPlan = {
+                    ...currentPlan,
+                    expense_items: updatedExpenseItems
+                  };
+
+                  const result = await BudgetService.updateBudgetPlan(updatedPlan);
+                  if (result) {
+                    setCurrentPlan(result);
+                    setSummary(BudgetService.calculateBudgetSummary(result));
+                    setBudgetPlans(plans => 
+                      plans.map(plan => plan.id === result.id ? result : plan)
+                    );
+                  }
+                }}
+              />
+            )}
 
             {/* Smart Notifications */}
             <SmartNotifications currentUserId={currentUserId} onNavigateToSection={onSectionChange} />
