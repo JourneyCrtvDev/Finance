@@ -14,12 +14,30 @@ if (!hasCredentials && isDevelopment) {
   console.log('2. Or manually add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to your .env file');
 }
 
-// Create client with fallback values to prevent immediate crashes
+// Create a mock client that throws helpful errors when credentials are missing
+const createMockClient = () => ({
+  auth: {
+    getUser: () => Promise.reject(new Error('Supabase not configured. Please connect to Supabase first.')),
+    signUp: () => Promise.reject(new Error('Supabase not configured. Please connect to Supabase first.')),
+    signInWithPassword: () => Promise.reject(new Error('Supabase not configured. Please connect to Supabase first.')),
+    signOut: () => Promise.reject(new Error('Supabase not configured. Please connect to Supabase first.')),
+    onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } })
+  },
+  from: () => ({
+    select: () => Promise.reject(new Error('Supabase not configured. Please connect to Supabase first.')),
+    insert: () => Promise.reject(new Error('Supabase not configured. Please connect to Supabase first.')),
+    update: () => Promise.reject(new Error('Supabase not configured. Please connect to Supabase first.')),
+    delete: () => Promise.reject(new Error('Supabase not configured. Please connect to Supabase first.'))
+  })
+});
+
+// Create client with fallback to mock client
 export const supabase = hasCredentials 
   ? createClient(supabaseUrl, supabaseAnonKey)
-  : null;
+  : createMockClient();
+
 export const getCurrentUser = async () => {
-  if (!supabase) {
+  if (!hasCredentials) {
     throw new Error('Supabase is not configured. Please check your environment variables.');
   }
   const { data: { user } } = await supabase.auth.getUser();
@@ -27,7 +45,7 @@ export const getCurrentUser = async () => {
 };
 
 export const signUpWithEmail = async (email: string, password: string) => {
-  if (!supabase) {
+  if (!hasCredentials) {
     throw new Error('Supabase is not configured. Please check your environment variables.');
   }
   const { data, error } = await supabase.auth.signUp({
@@ -38,7 +56,7 @@ export const signUpWithEmail = async (email: string, password: string) => {
 };
 
 export const signInWithEmail = async (email: string, password: string) => {
-  if (!supabase) {
+  if (!hasCredentials) {
     throw new Error('Supabase is not configured. Please check your environment variables.');
   }
   const { data, error } = await supabase.auth.signInWithPassword({
@@ -49,7 +67,7 @@ export const signInWithEmail = async (email: string, password: string) => {
 };
 
 export const signOut = async () => {
-  if (!supabase) {
+  if (!hasCredentials) {
     throw new Error('Supabase is not configured. Please check your environment variables.');
   }
   await supabase.auth.signOut();
