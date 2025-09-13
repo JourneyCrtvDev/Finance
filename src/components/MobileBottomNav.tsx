@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Calculator, TrendingUp, BarChart3, Settings, Palette, CreditCard, PieChart, MoreHorizontal } from 'lucide-react';
-import { ShoppingBag } from 'lucide-react';
 import { THEME_COLORS, applyThemeColor } from '../constants/colors';
 
 interface MobileBottomNavProps {
@@ -115,7 +114,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeSection,
                     setShowMoreMenu(false);
                     setShowColorPicker(true);
                   }}
-                  className="w-full flex items-center justify-center space-x-3 p-4 rounded-xl border-2 border-light-border dark:border-dark-border bg-light-glass dark:bg-dark-glass text-light-text dark:text-dark-text hover:border-lime-accent/30 transition-all"
+                  className="flex flex-col items-center space-y-3 p-4 rounded-xl border-2 border-light-border dark:border-dark-border bg-light-glass dark:bg-dark-glass text-light-text dark:text-dark-text hover:border-lime-accent/30 transition-all"
                 >
                   <div className="relative">
                     <Palette className="w-6 h-6" />
@@ -124,7 +123,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeSection,
                       style={{ backgroundColor: selectedColor.value }}
                     />
                   </div>
-                  <span className="font-medium">Change Theme Color</span>
+                  <span className="font-medium">Theme</span>
                 </motion.button>
               </div>
             </motion.div>
@@ -149,7 +148,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeSection,
               className="bg-light-surface dark:bg-dark-surface rounded-t-2xl p-6 w-full max-w-md mx-4 mb-20"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-bold text-light-text dark:text-dark-text">Choose Theme Color</h3>
                 <button
                   onClick={() => setShowColorPicker(false)}
@@ -159,27 +158,26 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeSection,
                 </button>
               </div>
               
-              <div className="grid grid-cols-4 gap-3">
+              <div className="grid grid-cols-3 gap-4">
                 {THEME_COLORS.map((color) => (
                   <motion.button
                     key={color.name}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                     onClick={() => handleColorChange(color)}
-                    className={`w-12 h-12 rounded-full border-4 transition-all ${
-                      selectedColor.name === color.name
-                        ? 'border-light-text dark:border-dark-text'
+                    className={`flex flex-col items-center space-y-2 p-4 rounded-xl border-2 transition-all ${
+                      selectedColor.value === color.value
+                        ? 'border-current'
                         : 'border-light-border dark:border-dark-border'
                     }`}
-                    style={{ backgroundColor: color.value }}
+                    style={{ color: color.value }}
                   >
-                    <item.icon className="w-6 h-6" />
-                    <span className="font-medium">{item.label}</span>
+                    <div className={`w-8 h-8 rounded-full ${color.class}`} />
+                    <span className="text-sm font-medium text-light-text dark:text-dark-text">
+                      {color.name}
+                    </span>
                   </motion.button>
                 ))}
-              </div>
-              
-              <div className="mt-4">
               </div>
             </motion.div>
           </motion.div>
