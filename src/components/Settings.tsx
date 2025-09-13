@@ -14,7 +14,8 @@ import {
   Smartphone,
   Calendar,
   DollarSign,
-  Save
+  Save,
+  LogOut
 } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 import { ColorPicker } from './ColorPicker';
