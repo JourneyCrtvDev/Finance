@@ -148,6 +148,15 @@ function App() {
   );
 }
 
+// Force cache refresh on app load
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(function(registrations) {
+    for(let registration of registrations) {
+      registration.update();
+    }
+  });
+}
+
 const AppContent: React.FC<{
   activeSection: string;
   setActiveSection: (section: string) => void;

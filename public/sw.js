@@ -1,4 +1,4 @@
-const CACHE_NAME = 'financehub-v1.0.0';
+const CACHE_NAME = 'financehub-v1.0.1';
 const STATIC_CACHE_URLS = [
   '/',
   '/index.html',
@@ -6,7 +6,7 @@ const STATIC_CACHE_URLS = [
   // Add your main assets here
 ];
 
-const DYNAMIC_CACHE_NAME = 'financehub-dynamic-v1.0.0';
+const DYNAMIC_CACHE_NAME = 'financehub-dynamic-v1.0.1';
 
 // Install event - cache static assets
 self.addEventListener('install', (event) => {
