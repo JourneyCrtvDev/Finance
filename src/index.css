@@ -98,6 +98,35 @@ body {
     padding: 0.75rem;
   }
   
+  /* Fix shopping list item layout on mobile */
+  .shopping-item-mobile {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1rem !important;
+  }
+  
+  /* Ensure status circles don't overflow */
+  .status-colors-mobile {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 0.75rem !important;
+    padding: 0.75rem 0 !important;
+  }
+  
+  /* Fix toggle switches on mobile */
+  .toggle-switch-mobile {
+    width: 3rem !important; /* 48px */
+    height: 1.5rem !important; /* 24px */
+    flex-shrink: 0 !important;
+  }
+  
+  .toggle-switch-mobile .toggle-circle {
+    width: 1.25rem !important; /* 20px */
+    height: 1.25rem !important; /* 20px */
+    top: 0.125rem !important; /* 2px */
+  }
+  
   /* Better spacing for mobile cards */
   .mobile-card {
     padding: 1.5rem !important;

@@ -367,7 +367,7 @@ export const Settings: React.FC<SettingsProps> = ({ onSignOut }) => {
               <motion.button
                 whileTap={{ scale: 0.95 }}
                 onClick={() => handlePrivacyChange(key as keyof typeof privacy)}
-                className={`relative w-12 h-6 rounded-full transition-colors ${
+                className={`relative w-12 h-6 rounded-full transition-colors flex-shrink-0 ${
                   privacy[key as keyof typeof privacy] ? 'bg-lime-accent' : 'bg-light-border dark:bg-dark-border'
                 }`}
               >
@@ -376,7 +376,7 @@ export const Settings: React.FC<SettingsProps> = ({ onSignOut }) => {
                     x: privacy[key as keyof typeof privacy] ? 24 : 2
                   }}
                   transition={{ duration: 0.2 }}
-                  className="absolute top-1 w-4 h-4 bg-white rounded-full shadow-sm"
+                  className="absolute top-0.5 w-5 h-5 bg-white rounded-full shadow-sm"
                 />
               </motion.button>
             </div>
