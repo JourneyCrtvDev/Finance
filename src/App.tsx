@@ -188,7 +188,7 @@ const AppContent: React.FC<{
           
           {/* Content Area */}
           <div className="flex-1 overflow-y-auto overflow-x-hidden pb-24 md:pb-8 pt-4 md:pt-0">
-            <div className="p-3 md:p-8 max-w-full overflow-x-hidden">
+            <div className="p-4 md:p-8 max-w-full overflow-x-hidden">
               {isNative && <NativeFeatures />}
               <AnimatePresence mode="wait">
                 <motion.div
@@ -197,7 +197,7 @@ const AppContent: React.FC<{
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
                   transition={{ duration: 0.3, ease: "easeInOut" }}
-                  className="overflow-x-hidden"
+                  className="overflow-x-hidden max-w-full"
                 >
                   {renderMainContent()}
                 </motion.div>

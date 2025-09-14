@@ -63,15 +63,15 @@ export const MobileQuickStats: React.FC<MobileQuickStatsProps> = ({ currentPlan,
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.3, delay: index * 0.1 }}
-            className={`p-3 rounded-xl border ${stat.bgColor} border-current/20`}
+            className={`p-4 rounded-xl border ${stat.bgColor} border-current/20`}
           >
-            <div className="flex items-center space-x-2 mb-2">
+            <div className="flex items-center space-x-2 mb-3">
               <stat.icon className={`w-4 h-4 ${stat.color}`} />
               <span className="text-xs font-medium text-light-text-secondary dark:text-dark-text-secondary">
                 {stat.label}
               </span>
             </div>
-            <p className={`text-lg font-bold ${stat.color}`}>
+            <p className={`text-xl font-bold ${stat.color}`}>
               {stat.value}
             </p>
           </motion.div>

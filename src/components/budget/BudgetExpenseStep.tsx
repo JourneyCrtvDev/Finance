@@ -271,7 +271,7 @@ export const BudgetExpenseStep: React.FC<BudgetExpenseStepProps> = ({
                     : 'border-light-border dark:border-dark-border'
                 }`}
               >
-                <div className="space-y-4">
+                <div className="space-y-5">
                   <div>
                     <label className="block text-sm text-light-text-secondary dark:text-dark-text-secondary mb-2">Expense Name</label>
                     <input

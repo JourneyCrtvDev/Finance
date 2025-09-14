@@ -356,13 +356,13 @@ export const BudgetSetupForm: React.FC<BudgetSetupFormProps> = ({ onNavigateToDa
         </div>
 
         {/* Navigation Buttons */}
-        <div className="flex flex-col sm:flex-row justify-between mt-6 md:mt-8 pt-4 md:pt-6 border-t border-light-border dark:border-dark-border gap-3 sm:gap-4">
+        <div className="flex flex-col sm:flex-row justify-between mt-8 md:mt-8 pt-6 md:pt-6 border-t border-light-border dark:border-dark-border gap-4 sm:gap-4">
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setCurrentStep(Math.max(1, currentStep - 1))}
             disabled={currentStep === 1}
-            className={`px-6 py-3 rounded-xl font-medium transition-all order-2 sm:order-1 ${
+            className={`px-6 py-4 rounded-xl font-medium transition-all order-2 sm:order-1 ${
               currentStep === 1
                 ? 'bg-light-glass dark:bg-dark-glass text-light-text-secondary dark:text-dark-text-secondary cursor-not-allowed flex-1 sm:flex-none'
                 : 'bg-light-glass dark:bg-dark-glass border border-light-border dark:border-dark-border text-light-text dark:text-dark-text hover:border-lime-accent/30 flex-1 sm:flex-none'
@@ -376,7 +376,7 @@ export const BudgetSetupForm: React.FC<BudgetSetupFormProps> = ({ onNavigateToDa
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setCurrentStep(Math.min(3, currentStep + 1))}
-              className="bg-lime-accent text-light-base dark:text-dark-base px-6 py-3 rounded-xl font-medium hover:shadow-glow transition-all flex-1 sm:flex-none order-1 sm:order-2"
+              className="bg-lime-accent text-light-base dark:text-dark-base px-6 py-4 rounded-xl font-medium hover:shadow-glow transition-all flex-1 sm:flex-none order-1 sm:order-2"
             >
               Next
             </motion.button>
@@ -386,7 +386,7 @@ export const BudgetSetupForm: React.FC<BudgetSetupFormProps> = ({ onNavigateToDa
               whileTap={{ scale: 0.95 }}
               onClick={handleSubmit}
               disabled={isLoading}
-              className="bg-lime-accent text-light-base dark:text-dark-base px-6 py-3 rounded-xl font-medium hover:shadow-glow transition-all disabled:opacity-50 flex-1 sm:flex-none order-1 sm:order-2"
+              className="bg-lime-accent text-light-base dark:text-dark-base px-6 py-4 rounded-xl font-medium hover:shadow-glow transition-all disabled:opacity-50 flex-1 sm:flex-none order-1 sm:order-2"
             >
               {isLoading ? (currentPlan ? 'Updating...' : 'Creating...') : (currentPlan ? 'Update Budget' : 'Create Budget')}
             </motion.button>

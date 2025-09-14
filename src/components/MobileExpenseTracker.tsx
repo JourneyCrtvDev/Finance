@@ -96,14 +96,14 @@ export const MobileExpenseTracker: React.FC<MobileExpenseTrackerProps> = ({
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3, delay: index * 0.05 }}
-              className="p-3 bg-light-glass dark:bg-dark-glass rounded-lg"
+              className="p-4 bg-light-glass dark:bg-dark-glass rounded-lg"
             >
-              <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center justify-between mb-3">
                 <div className="flex-1 min-w-0">
                   <h4 className="font-medium text-light-text dark:text-dark-text truncate">
                     {item.name}
                   </h4>
-                  <div className="flex items-center space-x-2 mt-1">
+                  <div className="flex items-center space-x-2 mt-2">
                     <span className={`text-xs px-2 py-1 rounded-full ${
                       item.category === 'fixed' 
                         ? 'bg-blue-500/20 text-blue-400' 
@@ -123,12 +123,12 @@ export const MobileExpenseTracker: React.FC<MobileExpenseTrackerProps> = ({
                 </div>
               </div>
               
-              <div className="grid grid-cols-2 gap-3 text-sm">
+              <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
                   <span className="text-light-text-secondary dark:text-dark-text-secondary block text-xs">
                     Planned:
                   </span>
-                  <span className="text-orange-400 font-bold">
+                  <span className="text-orange-400 font-bold text-base">
                     {item.planned.toLocaleString()} LEI
                   </span>
                 </div>
@@ -168,9 +168,9 @@ export const MobileExpenseTracker: React.FC<MobileExpenseTrackerProps> = ({
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => handleEditActual(item.id, item.actual)}
-                      className="flex items-center space-x-1 text-lime-accent font-bold hover:bg-lime-accent/10 px-1 py-1 rounded transition-colors"
+                      className="flex items-center space-x-1 text-lime-accent font-bold hover:bg-lime-accent/10 px-2 py-1 rounded transition-colors"
                     >
-                      <span className="text-sm">{item.actual.toLocaleString()} LEI</span>
+                      <span className="text-base">{item.actual.toLocaleString()} LEI</span>
                       <Edit3 className="w-3 h-3" />
                     </motion.button>
                   )}
@@ -182,13 +182,13 @@ export const MobileExpenseTracker: React.FC<MobileExpenseTrackerProps> = ({
       </div>
       
       {/* Summary */}
-      <div className="mt-4 pt-4 border-t border-light-border dark:border-dark-border">
+      <div className="mt-6 pt-4 border-t border-light-border dark:border-dark-border">
         <div className="grid grid-cols-2 gap-4 text-sm">
           <div className="text-center">
             <span className="text-light-text-secondary dark:text-dark-text-secondary block text-xs">
               Total Planned
             </span>
-            <span className="text-orange-400 font-bold">
+            <span className="text-orange-400 font-bold text-base">
               {currentPlan.expense_items.reduce((sum, item) => sum + item.planned, 0).toLocaleString()} LEI
             </span>
           </div>
@@ -196,7 +196,7 @@ export const MobileExpenseTracker: React.FC<MobileExpenseTrackerProps> = ({
             <span className="text-light-text-secondary dark:text-dark-text-secondary block text-xs">
               Total Actual
             </span>
-            <span className="text-lime-accent font-bold">
+            <span className="text-lime-accent font-bold text-base">
               {currentPlan.expense_items.reduce((sum, item) => sum + item.actual, 0).toLocaleString()} LEI
             </span>
           </div>

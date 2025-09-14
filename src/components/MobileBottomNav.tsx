@@ -122,6 +122,9 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeSection,
         <div className={`flex items-center justify-around px-2 ${
           isNative ? 'py-3' : 'py-2'
         }`}>
+        <div className={`flex items-center justify-around px-4 ${
+          isNative ? 'py-4' : 'py-3'
+        }`}>
           {navigation.map((item) => {
             const isActive = activeSection === item.id || 
               (item.id === 'more' && moreNavigation.some(moreItem => moreItem.id === activeSection));
@@ -132,7 +135,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeSection,
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={item.id === 'more' ? handleMoreClick : () => onSectionChange(item.id)}
-                className={`flex flex-col items-center space-y-1 px-3 py-2 rounded-lg transition-all min-w-0 min-h-[44px] ${
+                className={`flex flex-col items-center space-y-2 px-4 py-3 rounded-lg transition-all min-w-0 min-h-[48px] ${
                   isActive
                     ? 'text-lime-accent bg-lime-accent/10'
                     : 'text-light-text-secondary dark:text-dark-text-secondary hover:text-lime-accent hover:bg-lime-accent/5'

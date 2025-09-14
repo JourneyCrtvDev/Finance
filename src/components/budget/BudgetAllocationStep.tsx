@@ -59,7 +59,7 @@ export const BudgetAllocationStep: React.FC<BudgetAllocationStepProps> = ({
                   <h4 className="text-base md:text-lg font-semibold text-light-text dark:text-dark-text">{target.name}</h4>
                 </div>
 
-                <div className="space-y-4">
+                <div className="space-y-5">
                   <div>
                     <label className="block text-sm text-light-text-secondary dark:text-dark-text-secondary mb-2">Allocation Type</label>
                     <select

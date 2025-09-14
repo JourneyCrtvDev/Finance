@@ -87,8 +87,9 @@ body {
 /* Improve touch targets for mobile */
 @media (max-width: 768px) {
   button, [role="button"] {
-    min-height: 44px; /* iOS recommended minimum touch target */
-    min-width: 44px;
+    min-height: 48px; /* iOS recommended minimum touch target */
+    min-width: 48px;
+    padding: 0.75rem; /* Ensure adequate padding */
   }
   
   /* Prevent horizontal scrolling on mobile */
@@ -101,6 +102,29 @@ body {
   .container, .w-full, .max-w-full {
     max-width: 100vw !important;
     overflow-x: hidden !important;
+  }
+  
+  /* Improve spacing for mobile forms */
+  .space-y-3 > * + * {
+    margin-top: 1rem !important;
+  }
+  
+  .space-y-4 > * + * {
+    margin-top: 1.25rem !important;
+  }
+  
+  /* Better mobile card spacing */
+  .grid-cols-2 {
+    gap: 1rem !important;
+  }
+  
+  /* Ensure proper flex spacing on mobile */
+  .flex.space-x-2 > * + * {
+    margin-left: 0.75rem !important;
+  }
+  
+  .flex.space-x-3 > * + * {
+    margin-left: 1rem !important;
   }
 }
 

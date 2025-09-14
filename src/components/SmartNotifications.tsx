@@ -201,13 +201,13 @@ export const SmartNotifications: React.FC<SmartNotificationsProps> = ({
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3, delay: index * 0.05 }}
-              className={`p-4 rounded-xl border transition-all ${
+              className={`p-5 rounded-xl border transition-all ${
                 notification.isRead 
                   ? 'bg-light-glass dark:bg-dark-glass border-light-border dark:border-dark-border opacity-70' 
                   : getPriorityColor(notification.priority)
               }`}
             >
-              <div className="flex items-start space-x-3">
+              <div className="flex items-start space-x-4">
                 <div className="flex-shrink-0 mt-1">
                   {getNotificationIcon(notification.type)}
                 </div>
@@ -221,7 +221,7 @@ export const SmartNotifications: React.FC<SmartNotificationsProps> = ({
                     }`}>
                       {notification.title}
                     </h4>
-                    <div className="flex items-center space-x-2 ml-2">
+                    <div className="flex items-center space-x-3 ml-3">
                       {!notification.isRead && (
                         <div className="w-2 h-2 bg-lime-accent rounded-full" />
                       )}
@@ -236,7 +236,7 @@ export const SmartNotifications: React.FC<SmartNotificationsProps> = ({
                     </div>
                   </div>
                   
-                  <p className={`text-sm mt-1 ${
+                  <p className={`text-sm mt-2 ${
                     notification.isRead 
                       ? 'text-light-text-secondary dark:text-dark-text-secondary' 
                       : 'text-light-text dark:text-dark-text'
@@ -244,7 +244,7 @@ export const SmartNotifications: React.FC<SmartNotificationsProps> = ({
                     {notification.message}
                   </p>
                   
-                  <div className="flex items-center justify-between mt-3">
+                  <div className="flex items-center justify-between mt-4">
                     <span className="text-xs text-light-text-secondary dark:text-dark-text-secondary">
                       {formatTimestamp(notification.timestamp)}
                     </span>

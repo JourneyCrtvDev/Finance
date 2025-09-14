@@ -337,7 +337,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigateBack, onEditBudg
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
-        className="flex items-center bg-light-glass dark:bg-dark-glass border border-light-border dark:border-dark-border rounded-xl p-1"
+        className="flex items-center bg-light-glass dark:bg-dark-glass border border-light-border dark:border-dark-border rounded-xl p-2"
       >
         {[
           { id: 'overview', label: 'Overview', icon: BarChart3 },
@@ -347,7 +347,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigateBack, onEditBudg
           <motion.button
             key={tab.id}
             onClick={() => setActiveTab(tab.id as any)}
-            className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all flex-1 justify-center ${
+            className={`flex items-center space-x-2 px-4 py-3 rounded-lg transition-all flex-1 justify-center ${
               activeTab === tab.id
                 ? 'bg-lime-accent text-light-base dark:text-dark-base shadow-glow'
                 : 'text-light-text-secondary dark:text-dark-text-secondary hover:text-light-text dark:hover:text-dark-text'

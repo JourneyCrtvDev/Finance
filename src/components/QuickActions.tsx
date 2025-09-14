@@ -90,14 +90,14 @@ export const QuickActions: React.FC<QuickActionsProps> = ({ onAction }) => {
             whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => onAction(action.action)}
-            className={`p-6 rounded-xl border bg-gradient-to-br transition-all duration-300 text-left group ${getColorClasses(action.color)}`}
+            className={`p-6 md:p-6 rounded-xl border bg-gradient-to-br transition-all duration-300 text-left group ${getColorClasses(action.color)}`}
           >
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-5">
               <action.icon className="w-8 h-8 group-hover:scale-110 transition-transform duration-300" />
               <div className="w-2 h-2 rounded-full bg-current opacity-50 group-hover:opacity-100 transition-opacity" />
             </div>
             
-            <h4 className="font-bold text-light-text dark:text-dark-text mb-2 group-hover:text-current transition-colors">
+            <h4 className="font-bold text-light-text dark:text-dark-text mb-3 group-hover:text-current transition-colors">
               {action.label}
             </h4>
             <p className="text-xs text-light-text-secondary dark:text-dark-text-secondary group-hover:text-current/70 transition-colors">

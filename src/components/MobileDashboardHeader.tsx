@@ -50,6 +50,7 @@ export const MobileDashboardHeader: React.FC<MobileDashboardHeaderProps> = ({
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
         className="md:hidden bg-light-surface/80 dark:bg-dark-surface/80 backdrop-blur-glass border-b border-light-border dark:border-dark-border px-4 py-3 flex items-center justify-between sticky top-0 z-50 transition-colors duration-300"
+        className="md:hidden bg-light-surface/80 dark:bg-dark-surface/80 backdrop-blur-glass border-b border-light-border dark:border-dark-border px-4 py-4 flex items-center justify-between sticky top-0 z-50 transition-colors duration-300"
       >
         {/* Left section - Logo */}
         <div className="flex items-center space-x-3">
@@ -62,7 +63,7 @@ export const MobileDashboardHeader: React.FC<MobileDashboardHeaderProps> = ({
         </div>
 
         {/* Right section - Actions */}
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-3">
           {/* Notifications */}
           <motion.button
             whileHover={{ scale: 1.05 }}

@@ -87,7 +87,7 @@ export const BudgetIncomeStep: React.FC<BudgetIncomeStepProps> = ({
               transition={{ delay: index * 0.1 }}
               className="bg-light-surface/50 dark:bg-dark-surface/50 border border-light-border dark:border-dark-border rounded-xl p-4 md:p-6"
             >
-              <div className="space-y-3 md:grid md:grid-cols-3 md:gap-4 md:items-end md:space-y-0">
+              <div className="space-y-4 md:grid md:grid-cols-3 md:gap-4 md:items-end md:space-y-0">
                 <div>
                   <label className="block text-sm text-light-text-secondary dark:text-dark-text-secondary mb-2">Income Source</label>
                   <input
