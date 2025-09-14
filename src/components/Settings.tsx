@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 import { ColorPicker } from './ColorPicker';
+import { ToggleSwitch } from './ToggleSwitch';
 import { supabase, getCurrentUser } from '../lib/supabaseClient';
 import { DataExportService } from '../services/dataExportService';
 
@@ -302,16 +303,11 @@ export const Settings: React.FC<SettingsProps> = ({ onSignOut }) => {
               <motion.button
                 whileTap={{ scale: 0.95 }}
                 onClick={() => handleNotificationChange(key as keyof typeof notifications)}
-                className={`relative w-12 h-5 rounded-full transition-colors flex-shrink-0 p-0.5 ${
-                  notifications[key as keyof typeof notifications] ? 'bg-lime-accent' : 'bg-gray-300 dark:bg-gray-600'
-                }`}
+                className="flex-shrink-0"
               >
-                <motion.div
-                  animate={{
-                    x: notifications[key as keyof typeof notifications] ? 20 : 0
-                  }}
-                  transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                  className="w-4 h-4 bg-white rounded-full shadow-sm"
+                <ToggleSwitch
+                  checked={notifications[key as keyof typeof notifications]}
+                  onChange={() => handleNotificationChange(key as keyof typeof notifications)}
                 />
               </motion.button>
             </div>
@@ -367,16 +363,11 @@ export const Settings: React.FC<SettingsProps> = ({ onSignOut }) => {
               <motion.button
                 whileTap={{ scale: 0.95 }}
                 onClick={() => handlePrivacyChange(key as keyof typeof privacy)}
-                className={`relative w-12 h-5 rounded-full transition-colors flex-shrink-0 p-0.5 ${
-                  privacy[key as keyof typeof privacy] ? 'bg-lime-accent' : 'bg-gray-300 dark:bg-gray-600'
-                }`}
+                className="flex-shrink-0"
               >
-                <motion.div
-                  animate={{
-                    x: privacy[key as keyof typeof privacy] ? 20 : 0
-                  }}
-                  transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                  className="w-4 h-4 bg-white rounded-full shadow-sm"
+                <ToggleSwitch
+                  checked={privacy[key as keyof typeof privacy]}
+                  onChange={() => handlePrivacyChange(key as keyof typeof privacy)}
                 />
               </motion.button>
             </div>
