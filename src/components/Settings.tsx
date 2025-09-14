@@ -376,7 +376,7 @@ export const Settings: React.FC<SettingsProps> = ({ onSignOut }) => {
                     x: privacy[key as keyof typeof privacy] ? 24 : 2
                   }}
                   transition={{ duration: 0.2 }}
-                  className="absolute top-0.5 w-5 h-5 bg-white rounded-full shadow-sm"
+                  className="absolute top-0.5 w-5 h-5 bg-light-surface dark:bg-dark-surface rounded-full shadow-sm"
                 />
               </motion.button>
             </div>
