@@ -285,20 +285,6 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigateBack, onEditBudg
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={handleSignOut}
-            disabled={isSigningOut}
-            className="flex items-center space-x-2 bg-light-glass dark:bg-dark-glass border border-light-border dark:border-dark-border px-4 py-2 rounded-xl text-light-text dark:text-dark-text hover:border-red-400/30 hover:text-red-400 transition-all disabled:opacity-50"
-          >
-            {isSigningOut ? (
-              <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
-            ) : (
-              <LogOut className="w-4 h-4" />
-            )}
-            <span className="hidden sm:inline">{isSigningOut ? 'Signing Out...' : 'Sign Out'}</span>
-          </motion.button>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
             onClick={() => currentPlan && onEditBudget(currentPlan)}
             className="flex items-center space-x-2 bg-light-glass dark:bg-dark-glass border border-light-border dark:border-dark-border px-3 py-2 rounded-xl text-light-text dark:text-dark-text hover:border-lime-accent/30 transition-all"
           >

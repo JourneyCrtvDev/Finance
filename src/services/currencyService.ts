@@ -114,26 +114,69 @@ export class CurrencyService {
 
   static async getCurrentRates(): Promise<ExchangeRate[]> {
     try {
-      const [eurToRon, ronToEur] = await Promise.all([
-        this.getExchangeRate('EUR', 'RON'),
-        this.getExchangeRate('RON', 'EUR')
+      // Fetch live rates from multiple base currencies
+      const [eurResponse, usdResponse] = await Promise.all([
+        fetch(`${this.API_URL}/EUR`),
+        fetch(`${this.API_URL}/USD`)
       ]);
 
-      return [
-        {
+      if (!eurResponse.ok || !usdResponse.ok) {
+        throw new Error('Failed to fetch exchange rates');
+      }
+
+      const [eurData, usdData] = await Promise.all([
+        eurResponse.json(),
+        usdResponse.json()
+      ]);
+
+      const rates: ExchangeRate[] = [];
+
+      // EUR to RON
+      if (eurData.rates && eurData.rates.RON) {
+        rates.push({
           from: 'EUR',
           to: 'RON',
-          rate: eurToRon,
-          lastUpdated: new Date(),
+          rate: eurData.rates.RON,
+          lastUpdated: new Date(eurData.date || Date.now()),
           source: 'ExchangeRate-API'
-        },
-        {
+        });
+      }
+
+      // USD to RON
+      if (usdData.rates && usdData.rates.RON) {
+        rates.push({
+          from: 'USD',
+          to: 'RON',
+          rate: usdData.rates.RON,
+          lastUpdated: new Date(usdData.date || Date.now()),
+          source: 'ExchangeRate-API'
+        });
+      }
+
+      // RON to EUR (inverse of EUR to RON)
+      if (eurData.rates && eurData.rates.RON) {
+        rates.push({
           from: 'RON',
           to: 'EUR',
-          rate: ronToEur,
-          lastUpdated: new Date(),
+          rate: 1 / eurData.rates.RON,
+          lastUpdated: new Date(eurData.date || Date.now()),
           source: 'ExchangeRate-API'
-        }
+        });
+      }
+
+      // RON to USD (inverse of USD to RON)
+      if (usdData.rates && usdData.rates.RON) {
+        rates.push({
+          from: 'RON',
+          to: 'USD',
+          rate: 1 / usdData.rates.RON,
+          lastUpdated: new Date(usdData.date || Date.now()),
+          source: 'ExchangeRate-API'
+        });
+      }
+
+      return [
+        ...rates
       ];
     } catch (error) {
       console.error('Error fetching current rates:', error);
