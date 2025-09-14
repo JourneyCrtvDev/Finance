@@ -3,9 +3,9 @@ export interface ShoppingItem {
   name: string;
   quantity?: number;
   checked: boolean;
-  category?: string;
+  category: string;
   notes?: string;
-  statusColor?: string; // e.g., for color coding (optional)
+  statusColor: string; // Color representing the category
 }
 
 export interface ShoppingList {

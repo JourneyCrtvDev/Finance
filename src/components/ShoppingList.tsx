@@ -10,16 +10,18 @@ const defaultItem = (): ShoppingItem => ({
   name: '',
   quantity: 1,
   checked: false,
-  category: '',
+  category: 'General',
   notes: '',
-  statusColor: '#a3e635', // lime accent
+  statusColor: '#a3e635',
 });
 
-const statusColors = [
-  { color: '#a3e635', label: 'To Buy', bgClass: 'bg-lime-500' },
-  { color: '#fbbf24', label: 'In Cart', bgClass: 'bg-amber-500' },
-  { color: '#22d3ee', label: 'Not Found', bgClass: 'bg-cyan-500' },
-  { color: '#10b981', label: 'Bought', bgClass: 'bg-emerald-500' },
+const categoryColors = [
+  { color: '#a3e635', label: 'General', bgClass: 'bg-lime-500' },
+  { color: '#fbbf24', label: 'Food', bgClass: 'bg-amber-500' },
+  { color: '#22d3ee', label: 'Personal Care', bgClass: 'bg-cyan-500' },
+  { color: '#10b981', label: 'Household', bgClass: 'bg-emerald-500' },
+  { color: '#8b5cf6', label: 'Electronics', bgClass: 'bg-purple-500' },
+  { color: '#f97316', label: 'Clothing', bgClass: 'bg-orange-500' },
 ];
 
 export const ShoppingListComponent: React.FC = () => {
@@ -111,10 +113,10 @@ export const ShoppingListComponent: React.FC = () => {
     handleUpdateList(updatedItems);
   };
 
-  const handleChangeItemColor = (itemId: string, color: string) => {
+  const handleChangeItemCategory = (itemId: string, category: { color: string; label: string }) => {
     if (!activeList) return;
     const updatedItems = activeList.items.map(item =>
-      item.id === itemId ? { ...item, statusColor: color } : item
+      item.id === itemId ? { ...item, statusColor: category.color, category: category.label } : item
     );
     handleUpdateList(updatedItems);
   };
@@ -463,25 +465,29 @@ export const ShoppingListComponent: React.FC = () => {
                         </motion.button>
                         </div>
                         
-                        {/* Status Colors - Below on mobile */}
-                        <div className="flex items-center justify-center space-x-3 pt-2 border-t border-light-border dark:border-dark-border">
-                          <span className="text-xs text-light-text-secondary dark:text-dark-text-secondary mr-2">Status:</span>
-                          {statusColors.map(sc => (
+                        {/* Category Colors - Below item */}
+                        <div className="flex items-center justify-center space-x-2 pt-3 border-t border-light-border dark:border-dark-border">
+                          {categoryColors.map(category => (
                             <motion.button
-                              key={sc.color}
+                              key={category.color}
                               whileHover={{ scale: 1.1 }}
                               whileTap={{ scale: 0.9 }}
-                              className={`w-6 h-6 rounded-full border-2 transition-all ${
-                                item.statusColor === sc.color 
-                                  ? `${sc.bgClass} border-current shadow-lg` 
+                              className={`w-5 h-5 rounded-full border-2 transition-all ${
+                                item.statusColor === category.color 
+                                  ? `${category.bgClass} border-current shadow-lg` 
                                   : 'border-current opacity-40 hover:opacity-80'
                               }`}
-                              style={{ borderColor: sc.color }}
-                              title={sc.label}
-                              onClick={() => handleChangeItemColor(item.id, sc.color)}
+                              style={{ borderColor: category.color }}
+                              title={category.label}
+                              onClick={() => handleChangeItemCategory(item.id, category)}
                             />
                           ))}
                         </div>
+                        {item.category && (
+                          <span className="text-xs text-light-text-secondary dark:text-dark-text-secondary">
+                            {item.category}
+                          </span>
+                        )}
                       </div>
                     </motion.div>
                   ))
