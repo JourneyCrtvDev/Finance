@@ -303,7 +303,6 @@ export const Settings: React.FC<SettingsProps> = ({ onSignOut }) => {
                 whileTap={{ scale: 0.95 }}
                 onClick={() => handleNotificationChange(key as keyof typeof notifications)}
                 className={`relative w-14 h-8 rounded-full transition-colors flex-shrink-0 p-1 ${
-                className={`relative w-14 h-6 rounded-full transition-colors flex-shrink-0 p-1 ${
                   notifications[key as keyof typeof notifications] ? 'bg-lime-accent' : 'bg-gray-300 dark:bg-gray-600'
                 }`}
               >
@@ -312,7 +311,7 @@ export const Settings: React.FC<SettingsProps> = ({ onSignOut }) => {
                     x: notifications[key as keyof typeof notifications] ? 24 : 0
                   }}
                   transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                  className="w-4 h-4 bg-white rounded-full shadow-md"
+                  className="w-6 h-6 bg-white rounded-full shadow-md"
                 />
               </motion.button>
             </div>
@@ -368,8 +367,7 @@ export const Settings: React.FC<SettingsProps> = ({ onSignOut }) => {
               <motion.button
                 whileTap={{ scale: 0.95 }}
                 onClick={() => handlePrivacyChange(key as keyof typeof privacy)}
-                className={`relative w-14 h-8 rounded-full transition-colors flex-shrink-0 p-1 ${
-                className={`relative w-14 h-6 rounded-full transition-colors flex-shrink-0 p-1 ${
+                className={`relative w-14 h-7 rounded-full transition-colors flex-shrink-0 p-1 ${
                   privacy[key as keyof typeof privacy] ? 'bg-lime-accent' : 'bg-gray-300 dark:bg-gray-600'
                 }`}
               >
@@ -378,7 +376,7 @@ export const Settings: React.FC<SettingsProps> = ({ onSignOut }) => {
                     x: privacy[key as keyof typeof privacy] ? 24 : 0
                   }}
                   transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                  className="w-4 h-4 bg-white rounded-full shadow-md"
+                  className="w-5 h-5 bg-white rounded-full shadow-md"
                 />
               </motion.button>
             </div>
