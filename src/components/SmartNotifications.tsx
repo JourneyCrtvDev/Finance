@@ -207,7 +207,7 @@ export const SmartNotifications: React.FC<SmartNotificationsProps> = ({
                   : getPriorityColor(notification.priority)
               }`}
             >
-              <div className="flex items-start space-x-4">
+              <div className="flex items-start space-x-3">
                 <div className="flex-shrink-0 mt-1">
                   {getNotificationIcon(notification.type)}
                 </div>
@@ -221,7 +221,7 @@ export const SmartNotifications: React.FC<SmartNotificationsProps> = ({
                     }`}>
                       {notification.title}
                     </h4>
-                    <div className="flex items-center space-x-3 ml-3">
+                    <div className="flex items-center space-x-2 ml-2">
                       {!notification.isRead && (
                         <div className="w-2 h-2 bg-lime-accent rounded-full" />
                       )}
@@ -229,9 +229,9 @@ export const SmartNotifications: React.FC<SmartNotificationsProps> = ({
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
                         onClick={() => dismissNotification(notification.id)}
-                        className="p-1 hover:bg-red-400/10 rounded-full transition-colors"
+                        className="p-2 hover:bg-red-400/10 rounded-full transition-colors"
                       >
-                        <X className="w-3 h-3 text-red-400" />
+                        <X className="w-4 h-4 text-red-400" />
                       </motion.button>
                     </div>
                   </div>

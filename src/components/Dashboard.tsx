@@ -252,7 +252,65 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigateBack, onEditBudg
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="flex flex-col sm:flex-row sm:items-center justify-between space-y-4 sm:space-y-0"
+        className="flex flex-col space-y-4"
+      >
+        <div className="flex items-center space-x-3">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={onNavigateBack}
+            className="p-2 bg-light-glass dark:bg-dark-glass rounded-full hover:bg-lime-accent/10 transition-colors"
+          >
+            <ArrowLeft className="w-5 h-5 text-light-text dark:text-dark-text" />
+          </motion.button>
+          <h2 className="text-2xl md:text-3xl font-bold text-light-text dark:text-dark-text font-editorial">Budget Dashboard</h2>
+        </div>
+        
+        {/* Mobile Action Buttons */}
+        <div className="flex flex-wrap gap-3">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={handleExportCurrentBudget}
+            disabled={isExportingBudget}
+            className="flex items-center space-x-2 bg-light-glass dark:bg-dark-glass border border-light-border dark:border-dark-border px-4 py-3 rounded-xl text-light-text dark:text-dark-text hover:border-lime-accent/30 transition-all disabled:opacity-50 min-h-[48px]"
+          >
+            {isExportingBudget ? (
+              <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+            ) : (
+              <Download className="w-4 h-4" />
+            )}
+            <span>{isExportingBudget ? 'Exporting...' : 'Export'}</span>
+          </motion.button>
+          
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => currentPlan && onEditBudget(currentPlan)}
+            className="flex items-center space-x-2 bg-light-glass dark:bg-dark-glass border border-light-border dark:border-dark-border px-4 py-3 rounded-xl text-light-text dark:text-dark-text hover:border-lime-accent/30 transition-all min-h-[48px]"
+          >
+            <Edit3 className="w-4 h-4" />
+            <span>Edit Budget</span>
+          </motion.button>
+          
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={onNavigateBack}
+            className="flex items-center space-x-2 bg-lime-accent text-light-base dark:text-dark-base px-4 py-3 rounded-xl font-medium hover:shadow-glow transition-all min-h-[48px]"
+          >
+            <Plus className="w-4 h-4" />
+            <span>New Budget</span>
+          </motion.button>
+        </div>
+      </motion.div>
+
+      {/* Desktop Header - Hidden on Mobile */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="hidden md:flex md:flex-row md:items-center justify-between"
       >
         <div>
           <div className="flex items-center space-x-3 mb-2">

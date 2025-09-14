@@ -505,16 +505,16 @@ export const PaymentTracker: React.FC<PaymentTrackerProps> = ({ currentUserId, o
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
                           onClick={() => handleTogglePaid(payment.id)}
-                          className={`p-2 rounded-full transition-colors ${
+                          className={`w-8 h-8 flex items-center justify-center rounded-full transition-colors ${
                             payment.isPaid
                               ? 'bg-lime-accent text-light-base dark:text-dark-base'
                               : 'bg-light-glass dark:bg-dark-glass border border-light-border dark:border-dark-border hover:border-lime-accent/30'
                           }`}
                         >
                           {payment.isPaid ? (
-                            <Check className="w-4 h-4" />
+                            <Check className="w-3 h-3" />
                           ) : (
-                            <div className="w-4 h-4" />
+                            <div className="w-3 h-3" />
                           )}
                         </motion.button>
                         
@@ -633,16 +633,16 @@ export const PaymentTracker: React.FC<PaymentTrackerProps> = ({ currentUserId, o
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
                           onClick={() => handleTogglePaid(payment.id)}
-                          className={`p-2 rounded-full transition-colors ${
+                          className={`w-8 h-8 flex items-center justify-center rounded-full transition-colors ${
                             payment.isPaid
                               ? 'bg-lime-accent text-light-base dark:text-dark-base'
                               : 'bg-light-glass dark:bg-dark-glass border border-light-border dark:border-dark-border hover:border-lime-accent/30'
                           }`}
                         >
                           {payment.isPaid ? (
-                            <Check className="w-4 h-4" />
+                            <Check className="w-3 h-3" />
                           ) : (
-                            <div className="w-4 h-4" />
+                            <div className="w-3 h-3" />
                           )}
                         </motion.button>
                         

@@ -87,9 +87,26 @@ body {
 /* Improve touch targets for mobile */
 @media (max-width: 768px) {
   button, [role="button"] {
-    min-height: 48px; /* iOS recommended minimum touch target */
+    min-height: 44px; /* iOS recommended minimum touch target */
+    min-width: 44px;
+  }
+  
+  /* Specific touch targets for interactive elements */
+  .touch-target {
+    min-height: 48px;
     min-width: 48px;
-    padding: 0.75rem; /* Ensure adequate padding */
+    padding: 0.75rem;
+  }
+  
+  /* Better spacing for mobile cards */
+  .mobile-card {
+    padding: 1.5rem !important;
+    margin-bottom: 1rem !important;
+  }
+  
+  /* Improved mobile form spacing */
+  .mobile-form-spacing > * + * {
+    margin-top: 1.5rem !important;
   }
   
   /* Prevent horizontal scrolling on mobile */
@@ -106,25 +123,52 @@ body {
   
   /* Improve spacing for mobile forms */
   .space-y-3 > * + * {
-    margin-top: 1rem !important;
+    margin-top: 1.25rem !important;
   }
   
   .space-y-4 > * + * {
-    margin-top: 1.25rem !important;
+    margin-top: 1.5rem !important;
+  }
+  
+  .space-y-5 > * + * {
+    margin-top: 1.75rem !important;
+  }
+  
+  .space-y-6 > * + * {
+    margin-top: 2rem !important;
   }
   
   /* Better mobile card spacing */
   .grid-cols-2 {
+    gap: 1.25rem !important;
+  }
+  
+  .grid-cols-3 {
     gap: 1rem !important;
   }
   
   /* Ensure proper flex spacing on mobile */
   .flex.space-x-2 > * + * {
-    margin-left: 0.75rem !important;
+    margin-left: 1rem !important;
   }
   
   .flex.space-x-3 > * + * {
-    margin-left: 1rem !important;
+    margin-left: 1.25rem !important;
+  }
+  
+  .flex.space-x-4 > * + * {
+    margin-left: 1.5rem !important;
+  }
+  
+  /* Better mobile button spacing */
+  .mobile-button-group {
+    gap: 1rem !important;
+  }
+  
+  /* Improved mobile text sizing */
+  .mobile-text-responsive {
+    font-size: 0.875rem !important; /* 14px */
+    line-height: 1.5 !important;
   }
 }
 
