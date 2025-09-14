@@ -119,9 +119,6 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeSection,
           <div className="absolute bottom-0 left-0 right-0 h-safe bg-light-surface dark:bg-dark-surface" />
         )}
         
-        <div className={`flex items-center justify-around px-2 ${
-          isNative ? 'py-3' : 'py-2'
-        }`}>
         <div className={`flex items-center justify-around px-4 ${
           isNative ? 'py-4' : 'py-3'
         }`}>
