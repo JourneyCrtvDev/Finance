@@ -302,16 +302,16 @@ export const Settings: React.FC<SettingsProps> = ({ onSignOut }) => {
               <motion.button
                 whileTap={{ scale: 0.95 }}
                 onClick={() => handleNotificationChange(key as keyof typeof notifications)}
-                className={`relative w-14 h-8 rounded-full transition-colors flex-shrink-0 ${
+                className={`relative w-14 h-8 rounded-full transition-colors flex-shrink-0 p-1 ${
                   notifications[key as keyof typeof notifications] ? 'bg-lime-accent' : 'bg-gray-300 dark:bg-gray-600'
                 }`}
               >
                 <motion.div
                   animate={{
-                    x: notifications[key as keyof typeof notifications] ? 28 : 4
+                    x: notifications[key as keyof typeof notifications] ? 24 : 0
                   }}
                   transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                  className="absolute top-1 w-6 h-6 bg-white rounded-full shadow-md"
+                  className="w-6 h-6 bg-white rounded-full shadow-md"
                 />
               </motion.button>
             </div>
@@ -367,16 +367,16 @@ export const Settings: React.FC<SettingsProps> = ({ onSignOut }) => {
               <motion.button
                 whileTap={{ scale: 0.95 }}
                 onClick={() => handlePrivacyChange(key as keyof typeof privacy)}
-                className={`relative w-14 h-8 rounded-full transition-colors flex-shrink-0 ${
+                className={`relative w-14 h-8 rounded-full transition-colors flex-shrink-0 p-1 ${
                   privacy[key as keyof typeof privacy] ? 'bg-lime-accent' : 'bg-gray-300 dark:bg-gray-600'
                 }`}
               >
                 <motion.div
                   animate={{
-                    x: privacy[key as keyof typeof privacy] ? 28 : 4
+                    x: privacy[key as keyof typeof privacy] ? 24 : 0
                   }}
                   transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                  className="absolute top-1 w-6 h-6 bg-white rounded-full shadow-md"
+                  className="w-6 h-6 bg-white rounded-full shadow-md"
                 />
               </motion.button>
             </div>
