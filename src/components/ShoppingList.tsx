@@ -472,7 +472,7 @@ export const ShoppingListComponent: React.FC = () => {
                               key={category.color}
                               whileHover={{ scale: 1.1 }}
                               whileTap={{ scale: 0.9 }}
-                             className={`w-4 h-4 rounded-full border-2 transition-all ${
+                             className={`w-3 h-3 rounded-full border-2 transition-all ${
                                 item.statusColor === category.color 
                                   ? `${category.bgClass} border-current shadow-lg` 
                                   : 'border-current opacity-40 hover:opacity-80'

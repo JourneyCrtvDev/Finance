@@ -110,7 +110,7 @@ body {
     display: flex !important;
     flex-wrap: wrap !important;
     justify-content: center !important;
-    gap: 0.5rem !important;
+    gap: 0.375rem !important;
     padding: 0.75rem 0 !important;
   }
   
