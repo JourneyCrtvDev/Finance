@@ -419,12 +419,14 @@ export const ShoppingListComponent: React.FC = () => {
                           : 'bg-light-glass dark:bg-dark-glass border-light-border dark:border-dark-border'
                       }`}
                     >
-                      <div className="flex items-center space-x-3">
+                      <div className="space-y-3">
+                        {/* Main item row */}
+                        <div className="flex items-center space-x-3">
                         <motion.button
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
                           onClick={() => handleCheckItem(item.id)}
-                          className={`w-8 h-8 flex items-center justify-center rounded-full transition-colors ${
+                          className={`w-6 h-6 flex items-center justify-center rounded-full transition-colors flex-shrink-0 ${
                             item.checked
                               ? 'bg-lime-accent text-light-base dark:text-dark-base'
                               : 'bg-light-surface dark:bg-dark-surface border border-light-border dark:border-dark-border hover:border-lime-accent/30'
@@ -450,17 +452,29 @@ export const ShoppingListComponent: React.FC = () => {
                           </div>
                         </div>
 
-                        {/* Status Colors */}
-                        <div className="flex items-center space-x-2">
+
+                        <motion.button
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          onClick={() => handleDeleteItem(item.id)}
+                          className="p-2 text-red-400 hover:bg-red-400/10 rounded-lg transition-colors flex-shrink-0"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </motion.button>
+                        </div>
+                        
+                        {/* Status Colors - Below on mobile */}
+                        <div className="flex items-center justify-center space-x-3 pt-2 border-t border-light-border dark:border-dark-border">
+                          <span className="text-xs text-light-text-secondary dark:text-dark-text-secondary mr-2">Status:</span>
                           {statusColors.map(sc => (
                             <motion.button
                               key={sc.color}
                               whileHover={{ scale: 1.1 }}
                               whileTap={{ scale: 0.9 }}
-                              className={`w-5 h-5 rounded-full border-2 transition-all ${
+                              className={`w-6 h-6 rounded-full border-2 transition-all ${
                                 item.statusColor === sc.color 
-                                  ? `${sc.bgClass} border-current` 
-                                  : 'border-current opacity-30 hover:opacity-70'
+                                  ? `${sc.bgClass} border-current shadow-lg` 
+                                  : 'border-current opacity-40 hover:opacity-80'
                               }`}
                               style={{ borderColor: sc.color }}
                               title={sc.label}
@@ -468,15 +482,6 @@ export const ShoppingListComponent: React.FC = () => {
                             />
                           ))}
                         </div>
-
-                        <motion.button
-                          whileHover={{ scale: 1.1 }}
-                          whileTap={{ scale: 0.9 }}
-                          onClick={() => handleDeleteItem(item.id)}
-                          className="p-2 text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </motion.button>
                       </div>
                     </motion.div>
                   ))
