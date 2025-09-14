@@ -302,16 +302,16 @@ export const Settings: React.FC<SettingsProps> = ({ onSignOut }) => {
               <motion.button
                 whileTap={{ scale: 0.95 }}
                 onClick={() => handleNotificationChange(key as keyof typeof notifications)}
-                className={`relative w-11 h-6 rounded-full transition-colors flex-shrink-0 ${
+                className={`relative w-12 h-7 rounded-full transition-colors flex-shrink-0 ${
                   notifications[key as keyof typeof notifications] ? 'bg-lime-accent' : 'bg-light-border dark:bg-dark-border'
                 }`}
               >
                 <motion.div
                   animate={{
-                    x: notifications[key as keyof typeof notifications] ? 22 : 2
+                    x: notifications[key as keyof typeof notifications] ? 26 : 2
                   }}
                   transition={{ duration: 0.2 }}
-                  className="absolute top-0.5 w-5 h-5 bg-white rounded-full shadow-sm"
+                  className="absolute top-1 w-5 h-5 bg-white rounded-full shadow-sm"
                 />
               </motion.button>
             </div>
@@ -367,16 +367,16 @@ export const Settings: React.FC<SettingsProps> = ({ onSignOut }) => {
               <motion.button
                 whileTap={{ scale: 0.95 }}
                 onClick={() => handlePrivacyChange(key as keyof typeof privacy)}
-                className={`relative w-11 h-6 rounded-full transition-colors flex-shrink-0 ${
+                className={`relative w-12 h-7 rounded-full transition-colors flex-shrink-0 ${
                   privacy[key as keyof typeof privacy] ? 'bg-lime-accent' : 'bg-light-border dark:bg-dark-border'
                 }`}
               >
                 <motion.div
                   animate={{
-                    x: privacy[key as keyof typeof privacy] ? 22 : 2
+                    x: privacy[key as keyof typeof privacy] ? 26 : 2
                   }}
                   transition={{ duration: 0.2 }}
-                  className="absolute top-0.5 w-5 h-5 bg-white rounded-full shadow-sm"
+                  className="absolute top-1 w-5 h-5 bg-white rounded-full shadow-sm"
                 />
               </motion.button>
             </div>
