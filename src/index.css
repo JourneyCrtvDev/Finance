@@ -110,8 +110,10 @@ body {
     display: flex !important;
     flex-wrap: wrap !important;
     justify-content: center !important;
-    gap: 0.375rem !important;
+    gap: 0.25rem !important;
     padding: 0.75rem 0 !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
   }
   
   /* Fix toggle switches on mobile */

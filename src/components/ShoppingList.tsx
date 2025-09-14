@@ -466,13 +466,13 @@ export const ShoppingListComponent: React.FC = () => {
                         </div>
                         
                         {/* Category Colors - Below item */}
-                        <div className="flex items-center justify-center space-x-2 pt-3 border-t border-light-border dark:border-dark-border">
+                        <div className="flex items-center justify-center flex-wrap gap-2 pt-3 border-t border-light-border dark:border-dark-border px-2">
                           {categoryColors.map(category => (
                             <motion.button
                               key={category.color}
                               whileHover={{ scale: 1.1 }}
                               whileTap={{ scale: 0.9 }}
-                             className={`w-3 h-3 rounded-full border-2 transition-all ${
+                             className={`w-2 h-2 rounded-full border transition-all flex-shrink-0 ${
                                 item.statusColor === category.color 
                                   ? `${category.bgClass} border-current shadow-lg` 
                                   : 'border-current opacity-40 hover:opacity-80'
